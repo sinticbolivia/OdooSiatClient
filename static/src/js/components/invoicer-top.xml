@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.invoicer-top">
+        <div class="mb-1 shadow bg-white" style="padding:5px;border:1px solid #ececec;">
+			<div class="row p-1">
+				<div class="col-6 col-sm-3">
+					<t t-if="!props.activeEvent">
+						<div class="dropdown">
+							<button class="btn dropdown-toggle w-100 btn-block" type="button"
+								data-toggle="dropdown" data-bs-toggle="dropdown" data-coreui-toggle="dropdown" aria-expanded="false"
+								t-att-class="{'btn-success': !props.activeEvent, 'btn-danger': props.activeEvent}">
+								<t t-out="props.activeEvent ? 'Fuera de linea' : 'En Linea'" />
+							</button>
+							<ul class="dropdown-menu" style="z-index:800;">
+                                <t t-foreach="quickEvents" t-as="event" t-key="event.id">
+								    <li>
+                                        <a class="dropdown-item" href="javascript:;" t-on-click="() => this.openEvent(event)">
+                                            <t t-out="event.id + '. ' + event.label"></t>
+                                        </a>
+                                    </li>
+                                </t>
+							</ul>
+						</div>
+					</t>
+                    <t t-else="">
+                        <a class="btn btn-danger w-100" href="javascript:;" t-on-click="cerrarEvento">
+                            <t t-out="props.activeEvent.evento_id &lt; 5 ? 'FUERA DE LINEA' : 'CERRAR CONTINGENCIA'" />
+                        </a>
+                    </t>
+				</div>
+				<div class="col-12 col-sm-4">
+					<div class="">
+						<select class="form-control form-select" t-model.number="props.invoice.punto_venta" required="required">
+							<option value="">-- punto de venta --</option>
+							<option t-att-value="0">Punto de Venta 0 (por defecto)</option>
+                            <t t-foreach="props.puntosventa" t-as="pv" t-key="pv_index">
+                                <option t-att-value="pv.codigo">
+                                    (<t t-out="pv.codigo" />) <t t-out="pv.nombre" />
+                                </option>
+                            </t>
+						</select>
+					</div>
+				</div>
+				<div class="col-6 col-sm-4">
+					<div class="row">
+						<div class="col-12 col-sm-6">
+							<select class="form-control form-select" required="required" t-model.number="props.invoice.codigo_moneda">
+								<option value="">-- moneda --</option>
+                                <t t-foreach="props.monedas" t-as="m" t-key="m_index">
+                                    <option t-att-value="m.codigoClasificador">
+                                        <t t-out="m.descripcion" />
+                                    </option>
+                                </t>
+							</select>
+						</div>
+						<div class="col-12 col-sm-6">
+							<input type="text" class="form-control" t-model="props.invoice.tipo_cambio" />
+						</div>
+					</div>
+				</div>
+				<div class="col-1">
+					<a class="btn btn-primary float-end" t-on-click="opsClicked"
+						role="button" aria-controls="offcanvasExample">
+						<i class="fa fa-bars"></i>
+					</a>
+				</div>
+			</div>
+			<div class="alert alert-warning" t-if="props.activeEvent">
+				<div>
+					<b>Evento/Contingencia activa!!!</b>
+				</div>
+				<div>
+                    <b><t t-out="props.activeEvent.descripcion" />, <t t-out="props.activeEvent.fecha_inicio" /> - <t t-out="state.activeEvent.fecha_fin" /></b>
+                </div>
+				<div>Todas las facturas generadas se almacenaran localmente y no se enviaran a SIAT hasta cerrar el evento/contingencia.</div>
+			</div>
+			<!--
+			<div ref="modalcerrarevento" class="modal fade">
+				<form ref="formcerrar" action="" method="" novalidate>
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Cerrar Evento</h5>
+								<button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<template v-if="activeEvent">
+									<siat-cerrar-evento
+										ref="comcerrar"
+										v-bind:evento="activeEvent"
+										v-on:evento-cerrado="eventoCerrado" />
+								</template>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-danger" data-dismiss="modal" data-coreui-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-primary" v-on:click="cerrarEvento()">Cerrar Evento</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			-->
+		</div>
+    </t>
+
+</templates>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="siatclient_sync" model="ir.ui.view">
+        <field name="name">siatclient.sync</field>
+        <field name="model">siat_client.sync</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="sync" />
+        </field>
+    </record>
+    <record id="siatclient_invoices" model="ir.ui.view">
+        <field name="name">siatclient.invoices</field>
+        <field name="model">siat_client.invoice</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="invoices" />
+        </field>
+    </record>
+    <record id="siatclient_invoicer" model="ir.ui.view">
+        <field name="name">siatclient.invoicer</field>
+        <field name="model">siat_client.invoice</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="invoicer" />
+        </field>
+    </record>
+</odoo>

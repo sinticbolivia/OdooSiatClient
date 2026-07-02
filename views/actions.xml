@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="action_siatclient_sync" model="ir.actions.act_window">
+		<field name="name">SiatClient Sync</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat_client.sync</field>
+		<field name="view_mode">siatClient</field>
+		<field name="view_id" ref="siatclient_sync" />
+		<field name="help" type="html">
+			<p class="o_view_nocontent_empty_folder">
+				No se encontraron facturas
+			</p>
+			<p>
+				--------------------------
+			</p>
+		</field>
+	</record>
+	<!--
+	<record id="action_siatclient_pointofsales" model="ir.actions.act_window">
+		<field name="name">Siat Puntos de Venta</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat.pos</field>
+		<field name="view_mode">siat</field>
+		<field name="view_id" ref="siat_pos_view" />
+	</record>
+	<record id="action_siatclient_cufds" model="ir.actions.act_window">
+		<field name="name">Siat Cufds</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat.cufd</field>
+		<field name="view_mode">siat</field>
+		<field name="view_id" ref="siat_cufds_view" />
+	</record>
+	-->
+	<record id="action_siatclient_invoices" model="ir.actions.act_window">
+		<field name="name">SiatClient Facturas</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat_client.invoice</field>
+		<field name="view_mode">siatClient</field>
+		<field name="view_id" ref="siatclient_invoices" />
+	</record>
+	<record id="action_siatclient_invoicer" model="ir.actions.act_window">
+		<field name="name">SiatClient Facturador</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat_client.invoice</field>
+		<field name="view_mode">siatClient</field>
+		<field name="view_id" ref="siatclient_invoicer" />
+	</record>
+	<!--
+	<record id="action_siat_config" model="ir.actions.act_window">
+		<field name="name">Siat Config</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">siat.config</field>
+		<field name="view_mode">siat</field>
+		<field name="view_id" ref="siat_config_view" />
+	</record>
+	-->
+</odoo>

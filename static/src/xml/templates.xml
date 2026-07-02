@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+	<t t-name="siat_client.Renderer" owl="1">
+	   <!--
+        <t t-esc="props.propsYouWant" />
+        -->
+    </t>
+	<t t-name="siat_client.app">
+		<div class="o_action">
+			<div class="o_content">
+				<div t-if="props.view == 'sync'">
+					<SiatSync />
+				</div>
+				<div t-if="props.view == 'invoices'">
+					<SiatInvoices />
+				</div>
+				<div t-if="props.view == 'invoicer'">
+					<SiatInvoicer />
+				</div>
+			</div>
+		</div>
+	</t>
+</templates>

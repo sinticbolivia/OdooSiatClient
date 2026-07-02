@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.sync">
+        <div id="siat-sync-component">
+			<h2>Sincronizacion SIAT</h2>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-12 col-sm-3">
+						<div class="list-group">
+							<div t-foreach="menus" t-as="item" t-key="item.id" class="list-group-item list-group-item-action"
+								t-on-click="() => this.showComponent(item)">
+								<t t-out="item.label" />
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-9">
+						<div class="row">
+							<div class="col-12 col-sm-6">
+								<div class="form-group mb-2">
+									<select t-model="state.priv_sucursal_id" class="form-control form-select">
+										<option value="0">Sucursal Principal (0)</option>
+										<option t-foreach="state.sucursales" t-as="s" t-key="s.codigo" t-att-value="s.codigo">
+										    (<t t-out="s.codigo" />) <t t-out="s.nombre" />
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12 col-sm-6">
+								<div class="form-group mb-2">
+									<select t-model="state.priv_puntoventa_id" class="form-control form-select">
+										<option value="0">Punto Venta Principal (0)</option>
+										<option t-att-value="pv.codigo" t-foreach="state.puntos_venta" t-as="pv" t-key="pv.codigo">
+                                            <t t-out="pv.nombre" />
+                                        </option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<t t-if="state.com">
+							<t t-component="state.com.com" t-props="state.com_props" />
+						</t>
+					</div>
+				</div>
+			</div>
+		</div>
+    </t>
+	<t t-name="siat_client.sync_codigos">
+		<div id="com-sync-codigos">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3"><button type="button" class="btn btn-primary">Sincronizar</button></div>
+			<div class="row">
+				<div class="col-12 col-sm-6">
+					<h3>CUIS</h3>
+					<div class="mb-3">
+						<button type="button" class="btn btn-primary w-100" t-on-click="() => this.obtenerCuis(true)">Obtener codigo</button>
+					</div>
+					<div class="form-group mb-3">
+						<label>Codigo</label>
+						<input type="text" name="" t-att-value="state.cuis.codigo" class="form-control" />
+					</div>
+					<div class="form-group mb-3">
+						<label>Vigencia</label>
+						<input type="text" name="" t-att-value="state.cuis.fechaVigencia" class="form-control" />
+					</div>
+				</div>
+				<div class="col-12 col-sm-6">
+					<h3>CUFD</h3>
+					<div class="mb-3">
+						<button type="button" class="btn btn-primary w-100"  t-on-click="() => this.obtenerCufd(true)">Obtener codigo (Renovar)</button>
+					</div>
+					<div class="mb-3">
+						<label>Cufd</label>
+						<textarea name="" t-att-value="state.cufd.codigo" class="form-control"></textarea>
+					</div>
+					<div class="mb-3">
+						<label>Codigo Control</label>
+						<input type="text" name="" t-att-value="state.cufd.codigoControl" class="form-control" />
+					</div>
+					<div class="mb-3">
+						<label>Fecha Expiracion</label>
+						<input type="text" name="" t-att-value="state.cufd.fechaVigencia" class="form-control" />
+					</div>
+					<div class="mb-3">
+						<label>Direccion</label>
+						<textarea name="" t-att-value="state.cufd.direccion" class="form-control" style="height:200px"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_actividades">
+		<div id="com-sync-actividades">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo</th>
+					<th>Descripcion</th>
+					<th>Tipo</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item.codigoCaeb">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoCaeb" /></td>
+					<td><t t-out="item.descripcion" /></td>
+					<td><t t-out="item.tipoActividad" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_leyendas">
+		<div id="com-sync-leyendas">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo Actividad</th>
+					<th>Descripcion</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoActividad" /></td>
+					<td><t t-out="item.descripcionLeyenda" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_motivos_anulacion">
+		<div id="com-sync-anulacion">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo</th>
+					<th>Descripcion</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoClasificador" /></td>
+					<td><t t-out="item.descripcion" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_productos">
+		<div id="com-sync-productos-servicios">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo Actividad</th>
+					<th>Codigo Producto</th>
+					<th>Descripcion</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoActividad" /></td>
+					<td><t t-out="item.codigoProducto" /></td>
+					<td><t t-out="item.descripcionProducto" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_unidades_medida">
+		<div id="com-sync-unidades-medida">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo</th>
+					<th>Descripcion</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoClasificador" /></td>
+					<td><t t-out="item.descripcion" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+	<t t-name="siat_client.sync_metodos_pago">
+		<div id="com-sync-tipos-metodos-pago">
+			<h3><t t-out="props.title" /></h3>
+			<div class="mb-3">
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm table-striped">
+				<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Codigo</th>
+					<th>Descripcion</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
+					<td><t t-out="item_index + 1" /></td>
+					<td><t t-out="item.codigoClasificador" /></td>
+					<td><t t-out="item.descripcion" /></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</t>
+</templates>

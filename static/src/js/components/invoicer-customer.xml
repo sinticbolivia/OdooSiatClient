@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.invoicer-customer">
+        <div class="row">
+            <div class="col-12 col-sm-4">
+                <div class="mb-1">
+                    <label for="customer_name">Cliente</label>
+                    <div class="input-group" style="position:relative;">
+                        <input type="text" id="customer_name" class="form-control" autocomplete="off"
+                            t-model="state.keyword_customer"
+                            t-on-keyup="(ev) => this.buscarCliente('customer', ev)" required="" />
+                        <button type="button" class="btn btn-primary" title="Buscar cliente">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-warning" title="Crear cliente" t-on-click="crearCliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <!--
+                        <div class="invalid-feedback">Debe ingresar el nombre del cliente</div>
+                        -->
+                        <t t-if="state.customers_list.length &gt; 0">
+                            <div class="com-completion-results shadow" style="z-index:500;position:absolute;top:100%;left:0;width:100%;background:#fff;border:1px solid #ececec;max-height:250px;overflow:auto;">
+                                <ul style="list-style:none;padding:0;margin:0;">
+                                    <li t-foreach="state.customers_list" t-as="item" t-key="item_index" t-on-click="() => this.selectCustomer(item, item_index)"
+                                        style="cursor:pointer;:hover:background:#ececec;padding:6px;border-bottom:1px solid #ececec;">
+                                        <div class="container-fluid p-0 dropdown-item">
+                                            <div class="row no-gutters gx-0">
+                                                <div class="col-sm-2">
+                                                    <img t-att-src="item.image ? item.image : '/static/siat_client/images/client.png'" alt="" class="rounded-circle img-fluid img-thumbnail" />
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <div class="search-item-title"><t t-out="item.text" /></div>
+                                                    <div class="search-item-excerpt"><t t-out="item.email" /></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3">
+                <div class="mb-1">
+                    <label class="d-block">NIT/CI</label>
+                    <input type="text" class="form-control" required="" t-model="state.keyword_nit" />
+                    <div class="invalid-feedback">Debe ingresar el NIT/CI del cliente</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-1">
+                <div class="mb-1">
+                    <label title="Complemento">Com</label>
+                    <input type="text" class="form-control" t-model="props.invoice.complemento" />
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="mb-1">
+                    <label>Tipo de Documento de Identidad</label>
+                    <select class="form-control form-select" t-model.number="props.invoice.tipo_documento_identidad" required="">
+                        <option value="">-- tipo de documento --</option>
+                        <t t-foreach="props.tipos_documentos" t-as="tc" t-key="tc_index">
+                            <option t-att-value="tc.codigoClasificador">
+                                <t t-out="tc.descripcion" />
+                            </option>
+                        </t>
+                    </select>
+                    <div class="invalid-feedback">Debe seleccionar el tipo de documento</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-2">
+                    <label t-on-click="() => this.controlTributario('normal')" style="font-size:11px;">
+                        <input type="radio" name="im" value="normal" />
+                        Normal
+                    </label>
+                    <label t-on-click="() => this.controlTributario('control_tributario')" style="font-size:11px;">
+                        <input type="radio" name="im" value="control_tributario" />
+                        Control Tributario
+                    </label>
+                    <label t-on-click="() => this.controlTributario('ventas_menores')" style="font-size:11px;">
+                        <input type="radio" name="im" value="ventas_menores" />
+                        Ventas Menores del Dia
+                    </label>
+                    <label t-on-click="() => this.controlTributario('caso_especial')" style="font-size:11px;">
+                        <input type="radio" name="im" value="caso_especial" />
+                        Caso Especial
+                    </label>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

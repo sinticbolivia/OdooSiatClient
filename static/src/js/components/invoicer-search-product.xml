@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<t t-name="siat_client.invoicer-search-customer">
+    <div class="row">
+        <div class="col-12 col-sm-12">
+            <div class="mb-3" style="position:relative;">
+                <label>Adicionar item</label>
+                <div class="input-group">
+                    <input type="text" t-model="state.keyword" class="form-control" placeholder="Nombre del item/producto"
+                        t-on-keydown="(ev) => this.handleKeydown(ev)"
+                        t-on-keyup="(ev) => this.handleKeyup(ev)"
+                        />
+                    <button class="btn btn-primary" t-on-click="addItem">Adicionar</button>
+                </div>
+                <t v-if="state.products_list.length &gt; 0">
+                    <div class="com-completion-results shadow" style="z-index:500;position:absolute;top:100%;width:100%;background:#fff;border:1px solid #ececec;max-height:250px;overflow:auto;">
+                        <ul style="list-style:none;padding:0;margin:0;">
+                            <li t-foreach="state.products_list" t-as="item" t-key="item_index" t-on-click="(ev) => this.selectProduct(item, item_index, ev)" style="cursor:pointer;:hover:background:#ececec;padding:6px;border-bottom:1px solid #ececec;">
+                                <div class="container-fluid p-0 dropdown-item">
+                                    <div class="row p-2 no-gutters">
+                                        <div class="col-sm-2">
+                                            <span class="rounded-circle img-fluid img-thumbnail" style="font-size:30px;">
+                                                <i class="fa fa-box"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-10">
+                                            <div class="search-item-title">(<t t-out="item.code" />) <t t-out="item.name" /></div>
+                                            <div class="search-item-excerpt"><b>Precio:</b> <t t-out="item.list_price" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </div>
+</t>

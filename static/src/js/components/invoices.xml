@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.invoice_item">
+        <div class="card border shadow mb-2">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 col-sm-7">
+                            <div class="clearfix mb-2">
+                                <span class="border rounded p-1 bg-primary text-white">ID: <t t-out="props.invoice.invoice_id" /></span>
+                                <span class="border rounded p-1 bg-info text-white">Factura Nro: <t t-out="props.invoice.invoice_number" /></span>
+                                <t t-if="props.invoice.evento_id">
+                                    <span class="border rounded p-1 bg-warning btn-warning text-white">
+                                        <b>Evento:</b> <t t-out="props.invoice.evento_id" />
+                                    </span>
+                                </t>
+                            </div>
+                            <div><b>Cliente:</b> <t t-out="props.invoice.customer" /></div>
+                            <div>
+                                <b>Sucursal:</b> <t t-out="props.invoice.codigo_sucursal" />
+                                |
+                                <b>Punto Venta:</b> <t t-out="props.invoice.punto_venta" />
+                            </div>
+                            <div><b>Fecha emision:</b> <t t-out="props.invoice.invoice_date_time" /></div>
+                            <div><b>CUF:</b> <t t-out="props.invoice.cuf" /></div>
+                            <div><b>CUFD:</b> <t t-out="props.invoice.cufd" /></div>
+                            <div>
+                                <span class="label badge rounded"
+                                      t-att-class="{'label-success bg-success text-white': props.invoice.status == 'issued', 'label-warning bg-warning': props.invoice.status == 'error', 'label-danger bg-danger': props.invoice.status == 'void'}">
+                                    <t t-out="this.getStatus()" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-3">
+                            <div><b>Sector:</b> <t t-out="props.invoice.codigo_documento_sector" /></div>
+                            <div><b>Impuesto:</b> <t t-out="props.invoice.total_tax.toFixed(2)" /></div>
+                            <div><b>Total:</b> <t t-out="props.invoice.total.toFixed(2)" /></div>
+                        </div>
+                        <div class="col-12 col-sm-2">
+                            <a t-att-href="viewUrl()" target="_blank" class="btn btn-sm btn-warning w-100 mb-1 btn-block">Imprimir</a>
+                            <a t-att-href="viewUrl('rollo')" target="_blank" class="btn btn-sm btn-warning w-100 mb-1 btn-block">Imprimir Ticket</a>
+                            <t t-if="props.invoice.siat_id and props.invoice.siat_url">
+                                <a t-att-href="props.invoice.siat_url" target="_blank" class="btn btn-sm btn-info w-100 mb-1 btn-block">Siat Url</a>
+                            </t>
+                            <r t-if="props.invoice.status == 'issued'">
+                                <a href="javascript:;" class="btn btn-sm btn-danger w-100 mb-1 btn-block" t-on-click="() => this.openVoid()">Anular</a>
+                            </r>
+                            <a t-if="props.invoice.status == 'void'" href="javascript:;" class="btn btn-sm btn-danger w-100 mb-1 btn-block"
+                               t-on-click="() => this.revertir()">Revertir Anulacion</a>
+                            <!--
+                            <a href="javascript:;" class="btn btn-sm btn-primary w-100 mb-1 btn-block"
+                                t-on-click="reenviar(invoice, index)">Reenviar</a>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="siat_client.invoices">
+        <div id="com-siat-invoice-listing">
+			<h2>Listado de Facturas</h2>
+			<div class="form-group mb-2">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Buscar factura..." v-model="keyword" />
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-primary" t-on-click="() => this.search()">
+                            <i class="fa fa-search"></i>
+                        </button>
+					</div>
+				</div>
+			</div>
+            <!--
+			<pager v-if="total_pages > 1"
+				v-bind:currentPage="current_page"
+				v-bind:totalPages="total_pages"
+				v-on:pager-change-page="changePage"
+				v-on:pager-previous-page="prevPage"
+				v-on:pager-next-page="nextPage" />
+		    -->
+			<t t-foreach="state.items" t-as="invoice" t-key="invoice.invoice_id">
+                <SiatInvoiceItem motivosAnulacion="state.motivosAnulacion" invoice="invoice" />
+            </t>
+            <!--
+			<div class="mt-2 mb-2">
+				<pager v-if="total_pages > 1"
+					v-bind:currentPage="current_page"
+					v-bind:totalPages="total_pages"
+					v-on:pager-change-page="changePage"
+					v-on:pager-previous-page="prevPage"
+					v-on:pager-next-page="nextPage" />
+			</div>
+			-->
+		</div>
+    </t>
+</templates>

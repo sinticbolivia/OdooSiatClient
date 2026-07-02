@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.invoicer">
+        <div id="com-invoicer" style="position:relative;">
+            <SiatInvoicerTop puntosventa="state.puntosventa" monedas="state.monedas" invoice="state.invoice"
+				activeEvent="state.activeEvent"
+                onOpsClicked="() => this.showOps()"
+                />
+            <form t-ref="forminvoice" novalidate="novalidate">
+				<div class="container-fluid">
+					<SiatInvoicerCustomer tipos_documentos="state.tipos_documentos" invoice="state.invoice"
+						onCustomerSelected="(customer, nit) => this.onCustomerSelected(customer, nit)"
+						/>
+					<div id="cafc-data" class="row" t-if="state.activeEvent and [5, 6, 7].indexOf(state.activeEvent.evento_id) != -1">
+						<div class="col-6 col-sm-3">
+							<div class="mb-3">
+								<label>Nro. Factura (talonario)</label>
+								<input type="text" class="form-control" t-model="invoice.data.nro_factura" />
+							</div>
+						</div>
+						<div class="col-6 col-sm-3">
+							<div class="mb-3">
+								<label>Fecha</label>
+								<input type="date" class="form-control" t-ref="fecha" />
+							</div>
+						</div>
+						<div class="col-6 col-sm-3">
+							<div class="mb-3">
+								<label>Hora</label>
+								<input type="time" class="form-control" t-ref="hora" />
+							</div>
+						</div>
+					</div>
+
+					<t t-if="state.scom_detalle">
+						<h2>Datos Sector</h2>
+						<t t-component="state.scom_detalle" t-props="state.scom_detalle_props" />
+					</t>
+
+					<SiatInvoicerSearchProduct invoice="state.invoice" onProductAdded="() => this.calculateTotals()" />
+
+					<div class="row border-bottom">
+						<div class="col-12"><h2>Detalle</h2></div>
+						<div>Total Items: <t t-out="state.invoice.items.length" /></div>
+						<div class="col-sm-6 text-center"><b>Producto</b></div>
+						<div class="col-sm-2 text-center"><b>Cant.</b></div>
+						<div class="col-sm-2 text-center"><b>Precio</b></div>
+						<div class="col-sm-2 text-center"><b>Total</b></div>
+					</div>
+					<t t-if="state.invoice.items.length > 0">
+						<t t-foreach="state.invoice.items" t-as="item" t-key="item_index">
+							<t t-if="state.item_edit == item_index">
+								<div class="row">
+									<div class="col-12 col-sm-2">
+										<div class="mb-2">
+											<label>Codigo</label><input type="text" class="form-control" required="" t-model="item.product_code" />
+										</div>
+									</div>
+									<div class="col-12 col-sm-4">
+										<div class="mb-2">
+											<label>Producto</label>
+											<!--
+											<input type="text" class="form-control" required t-model="item.product_name" />
+											-->
+											<textarea class="form-control" required="" t-model="item.product_name"></textarea>
+										</div>
+									</div>
+									<div class="col-12 col-sm-2">
+										<div class="mb-2"><label>Cantidad</label><input type="number" class="form-control" t-model="item.quantity" /></div>
+									</div>
+									<div class="col-12 col-sm-2">
+										<div class="mb-2"><label>Precio</label><input type="text" class="form-control" t-model="item.price" /></div>
+									</div>
+									<div class="col-12 col-sm-2">
+										<div class="mb-2"><label>Descuento</label><input type="text" class="form-control" t-model="item.discount" /></div>
+									</div>
+									<t t-if="!item.product_id || item.product_id &lt;= 0">
+										<div class="col-12 col-sm-4">
+											<div class="mb-2">
+												<label class="">Actividad</label>
+												<select class="form-control form-select" required="" t-model="item.codigo_actividad">
+													<option value="">-- actividad --</option>
+													<t t-foreach="state.lista_actividades" t-as="a" t-key="a_index">
+														<option t-att-value="a.codigoCaeb">
+															<t t-out="a.descripcion" />
+														</option>
+													</t>
+												</select>
+											</div>
+										</div>
+										<div class="col-12 col-sm-4">
+											<div class="mb-2">
+												<label class="">Tipo Producto</label>
+												<select class="form-control form-select" required="" t-model="item.codigo_producto_sin">
+													<option value="">-- producto SIN --</option>
+													<option t-foreach="state.sinProducts" t-as="sp" t-key="sp_index" t-att-value="sp.codigoProducto">
+														<t t-out="sp.descripcionProducto" />
+													</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-12 col-sm-4">
+											<div class="mb-2">
+												<label>Unidad Medida</label>
+												<select class="form-control form-select" t-model="item.unidad_medida">
+													<t t-foreach="state.unidadesMedida" t-as="um" t-key="um_index">
+														<option t-att-value="um.codigoClasificador"><t t-out="um.descripcion" /></option>
+													</t>
+												</select>
+											</div>
+										</div>
+									</t>
+									<div class="col-12 col-sm-3">
+										<div class="mb-2"><label>Num. Serie</label><input type="text" class="form-control" t-model="item.numero_serie" /></div>
+									</div>
+									<div class="col-12 col-sm-3">
+										<div class="mb-2"><label>Num. IMEI</label><input type="text" class="form-control" t-model="item.numero_imei" /></div>
+									</div>
+								</div>
+
+								<t t-if="state.scom_item">
+									<t t-component="state.scom_item" t-props="{...state.scom_item_props, item}" />
+								</t>
+
+								<div class="row">
+									<div class="col">
+										<button type="button" class="btn btn-sm btn-primary" t-on-click="() => this.saveItem(item_index)">Guardar</button>
+									</div>
+								</div>
+							</t>
+							<t t-else="">
+								<div class="row border-bottom p-2" style="position:relative;">
+									<div class="col-12 col-sm-6">
+										<div class="fw-bold text-primary" style="font-size:13px;">Codigo: <t t-out="item.product_code" /></div>
+										<div><t t-out="item.product_name" /></div>
+									</div>
+									<div class="col-12 col-sm-2"><div class="text-center"><t t-out="item.quantity" /></div></div>
+									<div class="col-12 col-sm-2"><div class="text-end"><t t-out="item.price.toFixed(2)" /></div></div>
+									<div class="col-12 col-sm-2"><div class="text-end"><t t-out="item.total.toFixed(2)" /></div></div>
+									<div class="col-12 col-sm-12">
+										<button type="button" class="btn btn-sm btn-primary" t-on-click="() => this.editItem(item_index)"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-sm btn-danger" t-on-click="() => this.removeItem(item_index)"><i class="fa fa-trash"></i></button>
+									</div>
+								</div>
+							</t>
+						</t>
+					</t>
+					<div t-else="">
+						<h5 class="text-primary p-3 text-center">Aun no existen items en su factura</h5>
+					</div>
+
+					<div id="totals-container">
+
+						<t t-if="!state.com_sector_totals">
+							<div class="row border-bottom">
+								<div class="col-12 col-sm-9 text-end text-right"><b>Subtotal:</b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.subtotal.toFixed(2)" /></b></div>
+
+								<t t-if="state.with_giftcard">
+									<div class="col-12 col-sm-9 text-end text-right">
+										<div style="line-height:37px;"><b>Monto Gift Card:</b></div>
+									</div>
+									<div class="col-12 col-sm-3">
+										<input type="text" class="form-control text-end text-right" t-model="state.invoice.monto_giftcard" required="" />
+									</div>
+								</t>
+								<div class="col-12 col-sm-9 text-right text-end"><div style="line-height:37px;"><b>Descuento:</b></div></div>
+								<div class="col-12 col-sm-3">
+									<input type="text" class="form-control text-end text-right" t-model="state.invoice.discount"/>
+								</div>
+
+								<div class="col-12 col-sm-9 text-end text-right"><b>Total Base Credito Fiscal:</b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.total.toFixed(2)" /></b></div>
+
+								<div class="col-12 col-sm-9 text-end text-right"><b>Credito fiscal:</b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.total_tax.toFixed(2)" /></b></div>
+							</div>
+						</t>
+						<t t-else="">
+							<t t-component="state.com_sector_totals" t-props="state.com_sector_totals_props" />
+						</t>
+					</div>
+
+                    <div class="row">
+						<div class="col-12 col-sm-9 text-end"><b>Metodo de pago:</b></div>
+						<div class="col-12 col-sm-3 text-end">
+							<select class="form-select form-control form-select-sm bg-warning" t-model.number="state.invoice.codigo_metodo_pago" required="">
+								<option value="">-- metodo de pago --</option>
+								<t t-foreach="state.metodos_pago" t-as="mp" t-key="mp_index">
+									<option t-att-value="mp.codigoClasificador">
+										<t t-out="mp.descripcion" /> (<t t-out="mp.codigoClasificador" />)
+									</option>
+								</t>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 col-sm-12">
+							<div class="mt-3"><button type="button" class="btn btn-primary" t-on-click="save">Generar Factura</button></div>
+						</div>
+					</div>
+                </div>
+            </form>
+        </div>
+    </t>
+</templates>
