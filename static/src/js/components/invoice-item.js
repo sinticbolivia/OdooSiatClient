@@ -10,12 +10,18 @@ export class SiatInvoiceItem extends Component
     static props = {
         motivosAnulacion: {type: Array, optional: false},
         invoice: {type: Object, optional: false},
+        getSector: Function,
     };
     static components = {};
 
     setup()
     {
         this.dialogService = useService('dialog');
+    }
+    get documentoSector()
+    {
+        const code = this.props.invoice.codigo_documento_sector;
+        return this.props.getSector(code);
     }
     getStatus()
     {
@@ -28,7 +34,7 @@ export class SiatInvoiceItem extends Component
     }
     viewUrl(tpl)
     {
-        return this.props.invoice.print_url + (tpl == 'rollo' ? '?tpl=rollo' : '');
+        return this.props.invoice.print_url + (tpl ? `?tpl=${tpl}` : '');
     }
     openVoid()
     {

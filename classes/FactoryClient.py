@@ -3,33 +3,29 @@ from ..libs import client as siat
 
 
 class FactoryClient:
+    @staticmethod
+    def instance_type(type: str):
+        cfg = Config.get_instance()
+        service = siat.ServicioFacturacion() if type == 'facturacion' else siat.ServicioSincronizacion()
+        service.set_config(cfg)
 
+        return service
     @staticmethod
     def instance_sync_service() -> siat.ServicioSincronizacion:
-        cfg = Config.get_instance()
-        service = siat.ServicioSincronizacion()
-        service.set_server(cfg.server)
-        if not cfg.token:
-            service.login(cfg.username, cfg.password)
-        else:
-            service.set_token(cfg.token)
-            if service.is_token_expired() is True:
-                service.login(cfg.username, cfg.password)
-                cfg.token = service.get_token()
-                cfg.save()
+        service = FactoryClient.instance_type('sync')
+
+        if not service.get_token() or service.is_token_expired():
+            service.login()
+            service.get_config().save()
+
         return service
 
     @staticmethod
     def instance_service() -> siat.ServicioFacturacion:
-        cfg = Config.get_instance()
-        service = siat.ServicioFacturacion()
-        service.set_server(cfg.server)
-        if not cfg.token:
-            service.login(cfg.username, cfg.password)
-        else:
-            service.set_token(cfg.token)
-            if service.is_token_expired() is True:
-                service.login(cfg.username, cfg.password)
-                cfg.token = service.get_token()
-                cfg.save()
+        service = FactoryClient.instance_type('facturacion')
+
+        if not service.get_token() or service.is_token_expired():
+            service.login()
+            service.get_config().save()
+
         return service

@@ -8,6 +8,7 @@
 					<div class="col-12 col-sm-3">
 						<div class="list-group">
 							<div t-foreach="menus" t-as="item" t-key="item.id" class="list-group-item list-group-item-action"
+								 t-att-class="{'active': state.com and state.com.id == item.id}"
 								t-on-click="() => this.showComponent(item)">
 								<t t-out="item.label" />
 							</div>
@@ -95,7 +96,7 @@
 				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-sm table-striped">
+				<table class="table table-sm table-striped table-bordered">
 				<thead>
 				<tr>
 					<th>Nro</th>
@@ -123,7 +124,7 @@
 				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-sm table-striped">
+				<table class="table table-sm table-striped table-bordered">
 				<thead>
 				<tr>
 					<th>Nro</th>
@@ -142,32 +143,7 @@
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.sync_motivos_anulacion">
-		<div id="com-sync-anulacion">
-			<h3><t t-out="props.title" /></h3>
-			<div class="mb-3">
-				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
-			</div>
-			<div class="table-responsive">
-				<table class="table table-sm table-striped">
-				<thead>
-				<tr>
-					<th>Nro</th>
-					<th>Codigo</th>
-					<th>Descripcion</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoClasificador" /></td>
-					<td><t t-out="item.descripcion" /></td>
-				</tr>
-				</tbody>
-				</table>
-			</div>
-		</div>
-	</t>
+
 	<t t-name="siat_client.sync_productos">
 		<div id="com-sync-productos-servicios">
 			<h3><t t-out="props.title" /></h3>
@@ -175,7 +151,7 @@
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-sm table-striped">
+				<table class="table table-sm table-striped table-bordered">
 				<thead>
 				<tr>
 					<th>Nro</th>
@@ -196,25 +172,26 @@
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.sync_unidades_medida">
-		<div id="com-sync-unidades-medida">
+
+	<t t-name="siat_client.sync_parametricas">
+		<div id="com-sync-parametricas">
 			<h3><t t-out="props.title" /></h3>
 			<div class="mb-3">
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-sm table-striped">
+				<table class="table table-sm table-striped table-bordered">
 				<thead>
 				<tr>
-					<th>Nro</th>
-					<th>Codigo</th>
-					<th>Descripcion</th>
+					<th class="text-center">Nro</th>
+					<th class="text-center">Codigo</th>
+					<th class="text-center">Descripcion</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoClasificador" /></td>
+					<td class="text-center"><t t-out="item_index + 1" /></td>
+					<td class="text-center"><t t-out="item.codigoClasificador" /></td>
 					<td><t t-out="item.descripcion" /></td>
 				</tr>
 				</tbody>
@@ -222,26 +199,28 @@
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.sync_metodos_pago">
-		<div id="com-sync-tipos-metodos-pago">
+	<t t-name="siat_client.actividades-documentos-sector">
+		<div id="com-sync-actividades-documentos-sector">
 			<h3><t t-out="props.title" /></h3>
 			<div class="mb-3">
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-sm table-striped">
+				<table class="table table-sm table-striped table-bordered">
 				<thead>
 				<tr>
-					<th>Nro</th>
-					<th>Codigo</th>
-					<th>Descripcion</th>
+					<th class="text-center">Nro</th>
+					<th class="text-center">Codigo Actividad</th>
+					<th class="text-center">Codigo Documento Sector</th>
+					<th class="text-center">Tipo Documento Sector</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoClasificador" /></td>
-					<td><t t-out="item.descripcion" /></td>
+					<td class="text-center"><t t-out="item_index + 1" /></td>
+					<td class="text-center"><t t-out="item.codigoActividad" /></td>
+					<td class="text-center"><t t-out="item.codigoDocumentoSector" /></td>
+					<td><t t-out="item.tipoDocumentoSector" /></td>
 				</tr>
 				</tbody>
 				</table>

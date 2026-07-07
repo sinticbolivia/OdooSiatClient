@@ -1,9 +1,9 @@
 /** @odoo-module **/
 import {Component, onWillStart, onMounted, useState} from '@odoo/owl';
 
-export class SiatSyncUnidadesMedida extends Component
+export class SiatSyncActividadesDocumentosSector extends Component
 {
-    static template = 'siat_client.sync_parametricas';
+    static template = 'siat_client.actividades-documentos-sector';
     static props = {
         title: {type: String, optional: true},
         sucursal: {type: Number, optional: false},
@@ -22,7 +22,8 @@ export class SiatSyncUnidadesMedida extends Component
     }
     async getData()
     {
-        const res = await this.props.model.getUnidadesMedida();
-        this.state.lista = res.data.RespuestaListaParametricas.listaCodigos || [];
+        const res = await this.props.model.getActividadesDocumentosSector();
+        console.log(res);
+        this.state.lista = res.data.RespuestaListaActividadesDocumentoSector.listaActividadesDocumentoSector || [];
     }
 }

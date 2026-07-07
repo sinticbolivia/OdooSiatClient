@@ -1,7 +1,7 @@
 /** @odoo-module **/
 import {Component, onWillStart, onMounted, useState} from '@odoo/owl';
 
-export class SiatSyncUnidadesMedida extends Component
+export class SiatSyncDocumentosSector extends Component
 {
     static template = 'siat_client.sync_parametricas';
     static props = {
@@ -22,7 +22,7 @@ export class SiatSyncUnidadesMedida extends Component
     }
     async getData()
     {
-        const res = await this.props.model.getUnidadesMedida();
+        const res = await this.props.model.getDocumentosSector();
         this.state.lista = res.data.RespuestaListaParametricas.listaCodigos || [];
     }
 }

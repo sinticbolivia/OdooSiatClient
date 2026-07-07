@@ -3,7 +3,7 @@ import {Component, onWillStart, onMounted, useState} from '@odoo/owl';
 
 export class SiatSyncMetodosPago extends Component
 {
-    static template = 'siat_client.sync_metodos_pago';
+    static template = 'siat_client.sync_parametricas';
     static props = {
         title: {type: String, optional: true},
         sucursal: {type: Number, optional: false},

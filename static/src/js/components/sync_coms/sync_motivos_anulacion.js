@@ -3,7 +3,7 @@ import {Component, onWillStart, onMounted, useState} from '@odoo/owl';
 
 export class SiatSyncMotivosAnulacion extends Component
 {
-    static template = 'siat_client.sync_motivos_anulacion';
+    static template = 'siat_client.sync_parametricas';
     static props = {
         title: {type: String, optional: true},
         sucursal: {type: Number, optional: false},

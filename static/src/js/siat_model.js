@@ -111,6 +111,33 @@ class SiatModel
 	    const res = await this.orm.call('siat_client.sync', 'get_metodos_pago', [[]], args);
 	    return res;
     }
+    async getDocumentosSector(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_documento_sector', [[]], args);
+	    return res;
+    }
+    async getActividadesDocumentosSector(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_actividades_documento_sector', [[]], args);
+	    return res;
+    }
+    async getTiposHabitacion(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_habitacion', [[]], args);
+	    return res;
+    }
     async getPuntosVenta(sucursal, puntoventa)
     {
         const args = {

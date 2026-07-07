@@ -2,3 +2,5 @@ from . import ir_action
 from . import ir_ui_view
 from . import sync
 from . import invoice
+from . import product
+from . import account_move

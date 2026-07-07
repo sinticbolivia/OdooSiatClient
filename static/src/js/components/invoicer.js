@@ -6,8 +6,11 @@ import {SiatInvoicerTop} from './invoicer-top';
 import {SiatInvoicerCustomer} from './invoicer-customer';
 import {SiatInvoicerSearchProduct} from './invoicer-search-product';
 import {SiatModel} from '../siat_model';
-import {SiatInvoicerModalOptions} from '../modals/modal-ops';
 import SectoresSettings from './sectores/settings';
+import {SiatInvoicerModalOptions} from '../modals/modal-ops';
+import {SiatModalPrint} from '../modals/modal-print';
+import {SiatModalExcepcion} from '../modals/modal-excepcion';
+import {SiatModalTarjeta} from '../modals/modal-tarjeta';
 
 export class SiatInvoicer extends Component
 {
@@ -18,9 +21,12 @@ export class SiatInvoicer extends Component
     setup()
     {
         this.orm = useService('orm');
+        this.uiService = useService("ui");
         this.dialogService = useService('dialog');
         this.model = new SiatModel(this.orm);
         this.forminvoice = useRef('forminvoice');
+        this.generatedInvoice = null;
+        this.documentosSector = [];
 
         this.state = useState({
             puntosventa: [],
@@ -71,6 +77,7 @@ export class SiatInvoicer extends Component
     }
     async getParameters()
     {
+        this.uiService.block();
         try
         {
             //await Promise.all([]);
@@ -82,6 +89,7 @@ export class SiatInvoicer extends Component
             this.state.monedas = res.data.RespuestaListaParametricas.listaCodigos;
             res = await this.model.getMetodosPago();
             this.state.metodos_pago = res.data.RespuestaListaParametricas.listaCodigos;
+
             res = await this.model.getUserSectores();
             this.state.sectores = res.data || {};
             const entries = Object.entries(this.state.sectores);
@@ -103,6 +111,7 @@ export class SiatInvoicer extends Component
         {
             console.error('GET PARAMETERS ERROR', e);
         }
+        this.uiService.unblock();
     }
     showOps()
     {
@@ -213,54 +222,38 @@ export class SiatInvoicer extends Component
             const metodo_pago = this.state.metodos_pago.find( item => item.codigoClasificador == this.state.invoice.codigo_metodo_pago);
             if( !metodo_pago )
                 throw {error: 'Debe seleccionar el metodo de pago'};
-            if( metodo_pago.descripcion.toUpperCase().indexOf( 'TARJETA' ) != -1 )
+            if( metodo_pago.descripcion.toUpperCase().indexOf( 'TARJETA' ) != -1 && !this.state.invoice.numero_tarjeta )
             {
-                /*
-                this.state.invoice.numero_tarjeta = this.$refs.inputcard.dataset.realvalue || null;
-                this.$refs.formtarjeta.classList.add('was-validated');
-                if( !this.state.invoice.numero_tarjeta )
-                {
-                    this.openModal(this.modalDatosTarjeta);
-                    return;
-                }
-                if( !this.$refs.formtarjeta.checkValidity() )
-                {
-                    this.openModal(this.modalDatosTarjeta);
-                    throw {error: 'Datos de tarjeta invalidos'};
-                }
-                */
+                //this.state.invoice.numero_tarjeta = this.$refs.inputcard.dataset.realvalue || null;
+                this.dialogService.add(SiatModalTarjeta, {
+                    title: 'Ingreso los datos de la tarjeta',
+                    invoice: this.state.invoice,
+                    onSubmit: (nro_tarjeta) => {
+                        this.state.invoice.numero_tarjeta = nro_tarjeta;
+                        this.save();
+                    }
+                });
+                return true;
             }
             //this.state.invoice.customer_id 			= this.currentCustomer.id;
             //this.invoice.customer				= this.keyword_customer;
             //this.invoice.customer 				= this.currentCustomer.name; //`${this.currentCustomer.first_name} ${this.currentCustomer.last_name}`;
             //this.state.invoice.nit_ruc_nif 			= this.keyword_nit;
             console.log(this.state.invoice);
+            this.uiService.block();
             const res = await this.model.crearFactura(this.state.invoice);
             console.log('RESPONSE', res);
-            if( res && res.data && res.data.id )
+            if( res && res.data && res.data.invoice_id )
             {
-                //this.generatedInvoice = res.data;
-                //this.openModal(this.modalImprimir);
-                /*
-                this.dialogService.add(AlertDialog, {
-                    title: 'Nota de Credito/Debito',
-                    body: 'La Nota de Credito/Debito fue generada correctamente',
-                    confirmLabel: 'Imprimir',
-                    confirm: () => {
-                        //alert('Print');
-                        window.open(this.state.print_url, '_blank');
-                        this.reset();
-                    },
-                    cancel: () => {
-                        this.reset();
-                    },
-                    cancelLabel: 'Cerrar',
+                this.generatedInvoice = res.data;
+                this.dialogService.add(SiatModalPrint, {
+                    title: 'Factura Creada',
+                    invoice: this.generatedInvoice,
                 });
-                */
             }
-            this.state.activeEvent = null;
-            //await this.checkActiveEvent(this.invoice.codigo_sucursal, this.invoice.punto_venta);
+
             this.reset();
+            this.checkActiveEvent(this.state.invoice.codigo_sucursal, this.state.invoice.punto_venta);
         }
         catch(e)
         {
@@ -280,18 +273,33 @@ export class SiatInvoicer extends Component
                 //cancelLabel: 'Cerrar',
             });
         }
+        finally
+        {
+            this.uiService.unblock();
+        }
     }
     reset()
     {
+        this.state.activeEvent = null;
         const pv = this.state.invoice.punto_venta;
-        //this.state.invoice = 	new SBFramework.Models.Invoice();
-        //this.state.invoice.codigo_documento_sector = null;
-        //this.state.invoice.codigo_documento_sector = this.current_doc_sector;
-        //this.state.invoice.punto_venta = pv;
-        //this.currentCustomer = {id: 0, customer_id: 0};
+        this.state.invoice.items = [];
+        this.state.invoice.subtotal = 0;
+        this.state.invoice.total_tax = 0;
+        this.state.invoice.total = 0;
+        this.state.invoice.monto_giftcard = 0;
+        this.state.invoice.customer_id = null;
+        this.state.invoice.customer_email = null;
+        this.state.invoice.customer = null;
+        this.state.invoice.nit_ruc_nif = null;
+        this.state.invoice.complemento = null;
+        this.state.invoice.numero_tarjeta = null;
+        this.state.invoice.tipo_documento_identidad = '';
         //this.$refs.inputcard.value = '';
         //this.$refs.inputcard.dataset.realvalue = '';
         //this.keyword_customer = '';
         //this.keyword_nit = '';
+    }
+    async checkActiveEvent(sucursal, puntoventa)
+    {
     }
 }

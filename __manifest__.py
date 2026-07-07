@@ -23,7 +23,7 @@
 		#'views/pos_config.xml',
 		#'views/branch_view.xml',
 		#'views/events_view.xml',
-		#'views/product_view.xml',
+		'views/product_view.xml',
 		#'views/account_move_views.xml',
 		#'views/report_invoice.xml',
 		#'views/report_invoice_templates.xml',

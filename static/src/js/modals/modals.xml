@@ -126,4 +126,75 @@
             </t>
         </Dialog>
     </t>
+    <t t-name="siat_client.modal-print-invoice">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <div class="col-3 text-center">
+                <i class="fa fa-print" style="font-size:50px;"></i>
+            </div>
+            <div class="col-9">
+                <p>La factura fue generada correctamente</p>
+                <p>Desea imprimir la factura?</p>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger o-default-button" t-on-click="() => data.close()">
+                    Cerrar
+                </button>
+                <t t-if="props.invoice">
+                    <a t-att-href="props.invoice.print_url"
+                        target="_blank"
+                        class="btn btn-primary"
+                        t-on-click="() => data.close()">
+                        Imprimir
+                    </a>
+                    <a t-att-href="print_url_ticket" target="_blank" class="btn btn-warning" t-on-click="() => data.close()">
+                        Imprimir Ticket
+                    </a>
+                    <a t-att-href="print_url_receipt" target="_blank" class="btn btn-success" t-on-click="() => data.close()">
+                        Imprimir Comprobante
+                    </a>
+                </t>
+
+            </t>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-tarjeta">
+        <Dialog t-props="{'title': props.title, footer: true}">
+        <form t-ref="formtarjeta" novalidate="">
+            <p>Ingrese los datos de la tarjeta de credito/debito</p>
+            <div class="mb-3">
+                <label>Nro. de Tarjeta</label>
+                <div class="input-group">
+                    <span class="input-group-addon input-group-text "><i class="fa fa-credit-card"></i></span>
+                    <input type="text" class="form-control" required="" pattern="[0-9]{16}"
+                        maxlength="16" t-ref="inputcard"
+                        t-on-keydown="(ev) => this.handleKeydown(ev)"
+                        t-on-keyup="(ev) => this.handleKeyup(ev)"
+                    />
+                    <div class="invalid-feedback">Debe ingresar un numero de tarjeta valido</div>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger" t-on-click="() => data.close()">Cancelar</button>
+                <button type="button" class="btn btn-primary" t-on-click="save">Continuar</button>
+            </t>
+        </form>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-excepcion">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <div class="col-3 text-center">
+                <i class="fa fa-exclamation" style="font-size:50px;"></i>
+            </div>
+            <div class="col-9">
+                <p>El NIT del cliente no es valido</p>
+                <p>Desea generar la factura de todas formas?</p>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger" t-on-click="() => data.close()">Cerrar</button>
+                <button type="button" class="btn btn-primary" t-on-click="submit">
+                    Generar Factura
+                </button>
+            </t>
+        </Dialog>
+    </t>
 </templates>

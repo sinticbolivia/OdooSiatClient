@@ -203,6 +203,139 @@ class SiatSync(models.Model):
             raise UserError(str(e))
 
     @api.model
+    def get_tipos_documento_sector(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_documentos_sector(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_actividades_documento_sector(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.actividades_document_sector(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_tipos_habitacion(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_habitacion(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_tipos_eventos(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_eventos(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_tipos_emision(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_emision(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_tipos_facturas(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_facturas(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_tipos_puntoventa(self, *args, **kwargs):
+        sucursal = int(kwargs.get('sucursal', 0))
+        puntoventa = int(kwargs.get('puntoventa', 0))
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.tipos_punto_venta(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
     def get_puntosventa(self, *args, **kwargs):
         sucursal = int(kwargs.get('sucursal', 0))
         try:

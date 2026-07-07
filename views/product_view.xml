@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+				<page name="siat-data" string="Homologación Cliente Siat">
+					<group name="siat-data" >
+						<field name="unidad_medida" string="Unidad Medida SIN" invisible="1" />
+						<field name="unidad_medida_selector" string="Unidad Medida SIN" />
+						<field name="actividad_economica" string="Actividad Economica SIN" />
+						<field name="codigo_producto_sin" string="Codigo Producto SIN" invisible="1" />
+						<field name="codigo_producto_sin_selector" string="Codigo Producto SIN" />
+					</group>
+					<script type="text/javascript" src="/siat/static/src/js/product_view.js?v=1.0.0"></script>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
