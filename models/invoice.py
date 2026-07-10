@@ -1,13 +1,8 @@
-from abc import ABC
-
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError, UserError
-import json
+from odoo import models, api
+from odoo.exceptions import UserError
 import logging
 import traceback
 
-from ..classes.Config import Config
-from ..libs import client as siat
 from ..classes.FactoryClient import FactoryClient
 from ..resources.resource_customer import ResourceCustomer
 from ..libs.client import Factura

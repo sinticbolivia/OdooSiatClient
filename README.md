@@ -12,7 +12,7 @@ una suscripcion con Sintic Bolivia.
 
 https://sinticbolivia.net
 
-# Version de Odoo Compatibles
+# Versiones de Odoo Compatibles
 
 El modulo de facturacion, es compatible con versiones de Odoo 18 y 19, Community y Enterprise.
 NOTA: El modulo funciona en los tipos de instalacion On-Premise y Odoo.sh.

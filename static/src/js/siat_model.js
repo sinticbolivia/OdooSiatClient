@@ -6,20 +6,8 @@ class SiatModel
 	{
 		this.orm = orm;
 		this.resModel = resModel;
-		// const { imageField, limit, tooltipField } = archInfo;
-		//this.imageField = imageField;
 		this.fields = fields;
-		//this.limit = limit;
 		this.domain = domain;
-		//this.tooltipField = tooltipField;
-		//this.keepLast = new KeepLast();
-		//this.pager = { offset: 0, limit: limit };
-		//if (!(imageField in this.fields)) {
-			//throw `image_field error: ${imageField} is not a field of ${resModel}`;
-		//}
-		//if (!(tooltipField in this.fields)) {
-			//throw `image_field error: ${tooltipField} is not a field of ${resModel}`;
-		//}
 	}
 	async getCuis(sucursal, puntoventa)
 	{
@@ -136,6 +124,49 @@ class SiatModel
 	        puntoventa: puntoventa || 0,
         };
 	    const res = await this.orm.call('siat_client.sync', 'get_tipos_habitacion', [[]], args);
+	    return res;
+    }
+    async getTiposEventos(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_eventos', [[]], args);
+	    return res;
+    }
+    async getTiposEmision(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_emision', [[]], args);
+	    return res;
+    }
+    async getTiposFacturas(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_facturas', [[]], args);
+	    return res;
+    }
+    async getTiposPuntoVenta(sucursal, puntoventa)
+    {
+        const args = {
+	        sucursal: sucursal || 0,
+	        puntoventa: puntoventa || 0,
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_tipos_puntoventa', [[]], args);
+	    return res;
+    }
+    async getSucursales()
+    {
+        const args = {
+        };
+	    const res = await this.orm.call('siat_client.sync', 'get_sucursales', [[]], args);
 	    return res;
     }
     async getPuntosVenta(sucursal, puntoventa)

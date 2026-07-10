@@ -1,4 +1,4 @@
-from .Config import Config
+from ..libs.client import Config
 from ..libs import client as siat
 
 

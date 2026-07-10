@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
     <t t-name="siat_client.invoicer-top">
-        <div class="mb-1 shadow bg-white" style="padding:5px;border:1px solid #ececec;">
+        <div id="invoicer-top" class="mb-1 shadow bg-white" style="position:sticky;top:0;z-index:50;padding:5px;border:1px solid #ececec;">
 			<div class="row p-1">
 				<div class="col-6 col-sm-3">
 					<t t-if="!props.activeEvent">

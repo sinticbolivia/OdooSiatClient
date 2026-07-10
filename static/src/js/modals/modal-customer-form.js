@@ -19,6 +19,7 @@ export class SiatModalCustomerForm extends Component
     setup()
     {
         this.orm = useService('orm');
+        this.dialogService = useService('dialog');
         this.data = useState(this.env.dialogData);
         this.state = useState({
             customer: {
@@ -28,6 +29,7 @@ export class SiatModalCustomerForm extends Component
                 vat: '',
                 street: '',
                 email: '',
+                company_name: '',
             }
         });
         this.formcustomer = useRef('formcustomer');
@@ -37,13 +39,13 @@ export class SiatModalCustomerForm extends Component
     {
         try
         {
-            if( !this.formcustomer.checkValidity() )
+            if( !this.formcustomer.el.checkValidity() )
             {
-                this.formcustomer.classList.add('was-validated')
+                this.formcustomer.el.classList.add('was-validated')
                 return false;
             }
-            if( !this.state.customer.company )
-                this.state.customer.company = this.state.customer.lastname;
+            if( !this.state.customer.company_name )
+                this.state.customer.company_name = this.state.customer.lastname;
             this.state.customer.name = `${this.state.customer.firstname} ${this.state.customer.lastname}`.trim();
             const action = this.state.customer.id ? 'update' : 'create';
             const res = this.state.customer.id > 0 ?
@@ -51,13 +53,18 @@ export class SiatModalCustomerForm extends Component
                 await this.model.create(this.state.customer);
 
             this.data.close();
-            this.onCustomerCreated(action, Object.assign({}, this.state.customer));
+            this.props.onCustomerCreated(action, Object.assign({}, this.state.customer));
             this.resetCustomer();
         }
         catch(e)
         {
-            this.$root.$processing.hide();
-            alert(e.error || e.message || 'Ocurrio un error al crear el cliente');
+            this.dialogService.add(AlertDialog, {
+                title: 'Error Creando Cliente',
+                body: e.error || e.message || 'Ocurrio un error al crear el cliente',
+                confirmLabel: 'Cerrar',
+                confirm: () => {
+                },
+            });
         }
     }
     resetCustomer()
@@ -70,6 +77,7 @@ export class SiatModalCustomerForm extends Component
             firstname: '',
             lastname: '',
             email: '',
+            company_name: '',
         };
     }
 }

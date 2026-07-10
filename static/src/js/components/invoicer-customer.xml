@@ -19,7 +19,7 @@
                         <div class="invalid-feedback">Debe ingresar el nombre del cliente</div>
                         -->
                         <t t-if="state.customers_list.length &gt; 0">
-                            <div class="com-completion-results shadow" style="z-index:500;position:absolute;top:100%;left:0;width:100%;background:#fff;border:1px solid #ececec;max-height:250px;overflow:auto;">
+                            <div class="com-completion-results shadow" style="z-index:510;position:absolute;top:100%;left:0;width:100%;background:#fff;border:1px solid #ececec;max-height:250px;overflow:auto;">
                                 <ul style="list-style:none;padding:0;margin:0;">
                                     <li t-foreach="state.customers_list" t-as="item" t-key="item_index" t-on-click="() => this.selectCustomer(item, item_index)"
                                         style="cursor:pointer;:hover:background:#ececec;padding:6px;border-bottom:1px solid #ececec;">

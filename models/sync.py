@@ -1,11 +1,8 @@
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError, UserError
-import json
+from odoo import models, api
+from odoo.exceptions import UserError
 import logging
 import traceback
 
-from ..classes.Config import Config
-from ..libs import client as siat
 from ..classes.FactoryClient import FactoryClient
 
 _logger = logging.getLogger(__name__)
@@ -323,6 +320,23 @@ class SiatSync(models.Model):
         try:
             service = FactoryClient.instance_sync_service()
             res = service.tipos_punto_venta(sucursal, puntoventa)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT SYNC ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT SYNC GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def get_sucursales(self, *args, **kwargs):
+        try:
+            service = FactoryClient.instance_sync_service()
+            res = service.sucursales()
             return res
 
         except UserError as e:

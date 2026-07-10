@@ -25,12 +25,6 @@
 		#'views/events_view.xml',
 		'views/product_view.xml',
 		#'views/account_move_views.xml',
-		#'views/report_invoice.xml',
-		#'views/report_invoice_templates.xml',
-		#'views/report_invoice_basicos.xml',
-		#'views/invoice_email_template.xml',
-		#'views/account_report_invoice.xml',
-
 	],
 	'assets': {
 		'web.assets_backend': [
