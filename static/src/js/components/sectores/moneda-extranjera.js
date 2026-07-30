@@ -1,10 +1,10 @@
 /** @odoo-module **/
-import {Component, onMounted, useState, xml} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component, useState} = owl;
+const {onMounted} = owl.hooks;
+const {xml} = owl.tags;
 
 class DetalleExtranjera extends Component
 {
-	//removeFields: ['numero_serie', 'imei'],
 	static template = xml`<div>
 		<div class="row">
 			<div class="col-12 col-sm-6">

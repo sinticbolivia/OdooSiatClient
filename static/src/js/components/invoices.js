@@ -1,7 +1,9 @@
 /** @odoo-module **/
 
-import {Component, onWillStart, onMounted, useState, useRef} from '@odoo/owl';
-import { Pager } from "@web/core/pager/pager";
+const {Component, useState} = owl;
+const {onWillStart, onMounted, useRef} = owl.hooks;
+//import { usePager } from "@web/search/pager_hook";
+//import { Pager } from "@web/core/pager/pager";
 import {useService} from '@web/core/utils/hooks';
 import {SiatInvoiceItem} from './invoice-item';
 import { SiatModel } from '../siat_model';
@@ -11,7 +13,7 @@ export class SiatInvoices extends Component
     static template = 'siat_client.invoices';
     static props = {
     };
-    static components = {Pager, SiatInvoiceItem};
+    static components = {/*Pager,*/ SiatInvoiceItem};
 
     async setup()
     {
@@ -27,6 +29,16 @@ export class SiatInvoices extends Component
             limit: 25,
             total: 0,
         });
+        /*
+        usePager(() => ({
+            offset: this.state.offset,
+            limit: this.state.limit,
+            total: this.state.total,
+            onUpdate: (newState) => {
+                Object.assign(this.state, newState);
+            },
+        }));
+        */
         onWillStart(async () => {
             const res = await this.model.getDocumentosSector();
             this.documentos_sector = res.data.RespuestaListaParametricas.listaCodigos;

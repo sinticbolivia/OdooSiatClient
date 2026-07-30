@@ -1,14 +1,21 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef } from '@odoo/owl';
+const { Component, useState } = owl;
+const { useRef } = owl.hooks;
+const { xml } = owl.tags;
 import { useService } from "@web/core/utils/hooks";
 import { Dialog } from "@web/core/dialog/dialog";
 import { AlertDialog, ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 
-export class SiatInvoicerModalOptions extends Component
+export class SiatInvoicerModalOptions extends Dialog
 {
-    static template = 'siat_client.modal-ops';
-    static components = { Dialog };
+    static bodyTemplate = 'siat_client.modal-ops';
+    static footerTemplate = xml`<div>
+        <button class="btn btn-danger o-default-button" t-on-click="close">
+            Cerrar
+        </button>
+    </div>`;
+    static components = {  };
     static props = {
         close: {type: Function,},
         title: {type: String, optional: false},
@@ -19,12 +26,14 @@ export class SiatInvoicerModalOptions extends Component
     };
     setup()
     {
+        super.setup();
+        this.title = this.props.title;
         this.dialogService = useService('dialog');
         this.sectoresEl = useRef('sectoresEl');
         this.state = useState({
 
         });
-        this.data = useState(this.env.dialogData);
+        //this.data = useState(this.env.dialogData);
         //console.log('dialogData', this.env.dialogData);
     }
     onSectorChanged()

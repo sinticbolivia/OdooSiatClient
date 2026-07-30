@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
     <t t-name="siat_client.modal-void" owl="1">
-        <Dialog t-props="{'title': props.title, footer: true}">
+        <!-- <Dialog t-props="{'title': props.title, footer: true}">-->
             <div id="com-siat-void-invoice">
                 <form ref="form" class="" novalidate="true">
                     <div class="row">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Motivo anulacion</label>
-                        <select class="form-select" required="true" pattern="[1-9]+" t-on-change="handleMotivo">
+                        <select class="form-control form-select" required="true" pattern="[1-9]+" t-on-change="handleMotivo">
                             <option value="0">-- motivo anulacion --</option>
                             <t t-foreach="props.motivos" t-as="m" t-key="m.codigoClasificador">
                                 <option t-att-value="m.codigoClasificador"><t t-esc="m.descripcion" /></option>
@@ -52,46 +52,31 @@
                     </div>
                 </form>
             </div>
-            <t t-set-slot="footer">
-                <button class="btn btn-danger o-default-button" t-on-click="() => data.close()">
-                    <t>Cerrar</t>
-                </button>
-                <button type="button" class="btn btn-primary" t-on-click="onVoid">Anular</button>
-            </t>
-        </Dialog>
     </t>
     <t t-name="siat_client.modal-ops" owl="1">
-        <Dialog t-props="{'title': props.title, footer: true}">
-            <div class="form-grooup mb-2">
-                <label>Sucursal</label>
-                <select class="form-control form-select" t-model="props.invoice.codigo_sucursal">
-                    <option value="0">Sucursal Principal 0 (por defecto)</option>
-                    <t t-foreach="props.sucursales" t-as="s" t-key="s_index">
-                        <option t-att-value="s.codigo"><t t-out="s.nombre" /></option>
-                    </t>
-                </select>
-            </div>
-            <div class="form-group mb-2">
-                <label>Documento Sector</label>
-                <select class="form-control form-select" t-model.number="props.invoice.codigo_documento_sector"
-                    t-on-change="onSectorChanged" t-ref="sectoresEl">
-                    <option value="">-- documento sector --</option>
-                    <t t-foreach="props.sectores" t-as="ds" t-key="ds_index">
-                        <option t-att-value="ds[1].code" t-att-data-code="ds[0]">
-                            <t t-out="ds[1].label" />
-                        </option>
-                    </t>
-                </select>
-            </div>
-            <t t-set-slot="footer">
-                <button class="btn btn-danger o-default-button" t-on-click="() => data.close()">
-                    <t>Cerrar</t>
-                </button>
-            </t>
-        </Dialog>
+        <div class="form-grooup mb-2">
+            <label>Sucursal</label>
+            <select class="form-control form-select" t-model="props.invoice.codigo_sucursal">
+                <option value="0">Sucursal Principal 0 (por defecto)</option>
+                <t t-foreach="props.sucursales" t-as="s" t-key="s_index">
+                    <option t-att-value="s.codigo"><t t-esc="s.nombre" /></option>
+                </t>
+            </select>
+        </div>
+        <div class="form-group mb-2">
+            <label>Documento Sector</label>
+            <select class="form-control form-select" t-model.number="props.invoice.codigo_documento_sector" t-ref="sectoresEl"
+                t-on-change="onSectorChanged">
+                <option value="">-- documento sector --</option>
+                <t t-foreach="props.sectores" t-as="ds" t-key="ds_index">
+                    <option t-att-value="ds[1].code" t-att-data-code="ds[0]">
+                        <t t-esc="ds[1].label" />
+                    </option>
+                </t>
+            </select>
+        </div>
     </t>
-    <t t-name="siat_client.modal-customer">
-        <Dialog t-props="{'title': props.title, footer: true}">
+    <t t-name="siat_client.modal-customer" owl="1">
             <form t-ref="formcustomer" novalidate="">
                 <div class="mb-2">
                     <label>Nombres</label>
@@ -118,15 +103,9 @@
                     <input type="email" class="form-control" t-model="state.customer.email" />
                 </div>
             </form>
-            <t t-set-slot="footer">
-                <button class="btn btn-danger o-default-button" t-on-click="() => data.close()">
-                    <t>Cerrar</t>
-                </button>
-                <button type="button" class="btn btn-primary" t-on-click="guardarCliente">Guardar</button>
-            </t>
-        </Dialog>
+
     </t>
-    <t t-name="siat_client.modal-print-invoice">
+    <t t-name="siat_client.modal-print-invoice" owl="1">
         <Dialog t-props="{'title': props.title, footer: true}">
             <div class="col-3 text-center">
                 <i class="fa fa-print" style="font-size:50px;"></i>
@@ -157,7 +136,7 @@
             </t>
         </Dialog>
     </t>
-    <t t-name="siat_client.modal-tarjeta">
+    <t t-name="siat_client.modal-tarjeta" owl="1">
         <Dialog t-props="{'title': props.title, footer: true}">
         <form t-ref="formtarjeta" novalidate="">
             <p>Ingrese los datos de la tarjeta de credito/debito</p>
@@ -180,7 +159,7 @@
         </form>
         </Dialog>
     </t>
-    <t t-name="siat_client.modal-excepcion">
+    <t t-name="siat_client.modal-excepcion" owl="1">
         <Dialog t-props="{'title': props.title, footer: true}">
             <div class="col-3 text-center">
                 <i class="fa fa-exclamation" style="font-size:50px;"></i>

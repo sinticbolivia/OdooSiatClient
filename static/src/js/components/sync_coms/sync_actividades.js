@@ -1,10 +1,10 @@
 /** @odoo-module **/
-import {Component, onMount, onWillStart, xml, useState} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component} = owl;
+const {onMounted, onWillStart, useState } = owl.hooks;
 
 export class SiatSyncActividades extends Component
 {
-    static template = 'siat_client.sync_actividades';
+    static template = 'siat_client.SiatSyncActividades';
     static props = {
         title: {type: String, optional: true},
         sucursal: {type: Number, optional: false},

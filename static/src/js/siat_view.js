@@ -1,37 +1,33 @@
-/** @odoo-module */
+/** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import SiatViewController from './siat_controller';
+import { standardViewProps } from "@web/views/helpers/standard_view_props";
+import { Layout } from "@web/views/layout";
 import { SiatArchParser } from './siat_arch_parser';
-import { SiatViewRenderer } from './siat_render';
-import { SiatModel } from './siat_model';
+//import { SiatViewRenderer } from './siat_render';
+const { Component } = owl;
+import { SiatSync } from './components/sync';
+import { SiatInvoices } from './components/invoices';
+import { SiatInvoicer } from './components/invoicer';
 
-//import { mountComponent } from "@web/env";
-import { Component, whenReady, useState, onWillStart, onMounted } from "@odoo/owl";
+export class SiatClientView extends Component
+{
+    static ArchParser = SiatArchParser;
+    static type = 'siatClient';
+    static icon = "fa-bar-chart";
+    static display_name = 'Siat Client View';
+    static template = "siat_client.app";
+    static props = {
+        ...standardViewProps,
+    };
+    static components = { Layout, SiatSync, SiatInvoices, SiatInvoicer };
 
-//whenReady( () => mountComponent(SiatView, document.body));
-export const siatClientView = {
-    type: "siatClient",
-    display_name: "SiatClient",
-    icon: "fa fa-picture-o",
-    multiRecord: true,
-    Controller: SiatViewController,
-    Renderer: SiatViewRenderer,
-    ArchParser: SiatArchParser,
-    Model: SiatModel,
-
-    props(genericProps, view)
+    setup()
     {
-        const { ArchParser, Model, Renderer } = view;
-        const { arch, relatedModels, resModel } = genericProps;
-        const archInfo = new ArchParser().parse(arch);
-
-        return {
-            ...genericProps,
-            archInfo,
-            Model: view.Model,
-            Renderer,
-        };
-    },
-};
-registry.category("views").add("siatClient", siatClientView);
+        const { arch, fields } = this.props;
+        const parser = new SiatArchParser();
+        const archData = parser.parse(arch);
+        this.props.view = archData.view;
+    }
+}
+registry.category("views").add('siatClient', SiatClientView);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
-    <t t-name="siat_client.sync">
+    <t t-name="siat_client.sync" owl="1">
         <div id="siat-sync-component">
 			<h2>Sincronizacion SIAT</h2>
 			<div class="container-fluid">
@@ -8,9 +8,10 @@
 					<div class="col-12 col-sm-3">
 						<div class="list-group">
 							<div t-foreach="menus" t-as="item" t-key="item.id" class="list-group-item list-group-item-action"
-								 t-att-class="{'active': state.com and state.com.id == item.id}"
-								t-on-click="() => this.showComponent(item)">
-								<t t-out="item.label" />
+								t-att-class="{'active': state.com and state.com.id == item.id}"
+								t-att-data-item="item_index"
+								t-on-click="showComFromAttr">
+								<t t-esc="item.label" />
 							</div>
 						</div>
 					</div>
@@ -21,7 +22,7 @@
 									<select t-model="state.priv_sucursal_id" class="form-control form-select">
 										<option value="0">Sucursal Principal (0)</option>
 										<option t-foreach="state.sucursales" t-as="s" t-key="s.codigo" t-att-value="s.codigo">
-										    (<t t-out="s.codigo" />) <t t-out="s.nombre" />
+										    (<t t-esc="s.codigo" />) <t t-esc="s.nombre" />
 										</option>
 									</select>
 								</div>
@@ -31,7 +32,7 @@
 									<select t-model="state.priv_puntoventa_id" class="form-control form-select">
 										<option value="0">Punto Venta Principal (0)</option>
 										<option t-att-value="pv.codigo" t-foreach="state.puntos_venta" t-as="pv" t-key="pv.codigo">
-                                            <t t-out="pv.nombre" />
+                                            <t t-esc="pv.nombre" />
                                         </option>
 									</select>
 								</div>
@@ -45,15 +46,17 @@
 			</div>
 		</div>
     </t>
-	<t t-name="siat_client.sync_codigos">
+	<t t-name="siat_client.SiatSyncCodigos" owl="1">
 		<div id="com-sync-codigos">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3"><button type="button" class="btn btn-primary">Sincronizar</button></div>
 			<div class="row">
 				<div class="col-12 col-sm-6">
 					<h3>CUIS</h3>
 					<div class="mb-3">
-						<button type="button" class="btn btn-primary w-100" t-on-click="() => this.obtenerCuis(true)">Obtener codigo</button>
+						<button type="button" class="btn btn-primary w-100" t-att-data-force="1" t-on-click="obtenerCuis">
+							Obtener codigo
+						</button>
 					</div>
 					<div class="form-group mb-3">
 						<label>Codigo</label>
@@ -67,7 +70,9 @@
 				<div class="col-12 col-sm-6">
 					<h3>CUFD</h3>
 					<div class="mb-3">
-						<button type="button" class="btn btn-primary w-100"  t-on-click="() => this.obtenerCufd(true)">Obtener codigo (Renovar)</button>
+						<button type="button" class="btn btn-primary w-100" t-att-data-force="1" t-on-click="obtenerCufd">
+							Obtener codigo (Renovar)
+						</button>
 					</div>
 					<div class="mb-3">
 						<label>Cufd</label>
@@ -89,11 +94,12 @@
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.sync_actividades">
+
+	<t t-name="siat_client.SiatSyncActividades" owl="1">
 		<div id="com-sync-actividades">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3">
-				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
 				<table class="table table-sm table-striped table-bordered">
@@ -107,21 +113,21 @@
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item.codigoCaeb">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoCaeb" /></td>
-					<td><t t-out="item.descripcion" /></td>
-					<td><t t-out="item.tipoActividad" /></td>
+					<td><t t-esc="item_index + 1" /></td>
+					<td><t t-esc="item.codigoCaeb" /></td>
+					<td><t t-esc="item.descripcion" /></td>
+					<td><t t-esc="item.tipoActividad" /></td>
 				</tr>
 				</tbody>
 				</table>
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.sync_leyendas">
+	<t t-name="siat_client.sync_leyendas" owl="1">
 		<div id="com-sync-leyendas">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3">
-				<button type="button" class="btn btn-primary" t-on-click="() => this.getData()">Sincronizar</button>
+				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
 			<div class="table-responsive">
 				<table class="table table-sm table-striped table-bordered">
@@ -134,9 +140,9 @@
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoActividad" /></td>
-					<td><t t-out="item.descripcionLeyenda" /></td>
+					<td><t t-esc="item_index + 1" /></td>
+					<td><t t-esc="item.codigoActividad" /></td>
+					<td><t t-esc="item.descripcionLeyenda" /></td>
 				</tr>
 				</tbody>
 				</table>
@@ -144,9 +150,9 @@
 		</div>
 	</t>
 
-	<t t-name="siat_client.sync_productos">
+	<t t-name="siat_client.sync_productos" owl="1">
 		<div id="com-sync-productos-servicios">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3">
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
@@ -162,10 +168,10 @@
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td><t t-out="item_index + 1" /></td>
-					<td><t t-out="item.codigoActividad" /></td>
-					<td><t t-out="item.codigoProducto" /></td>
-					<td><t t-out="item.descripcionProducto" /></td>
+					<td><t t-esc="item_index + 1" /></td>
+					<td><t t-esc="item.codigoActividad" /></td>
+					<td><t t-esc="item.codigoProducto" /></td>
+					<td><t t-esc="item.descripcionProducto" /></td>
 				</tr>
 				</tbody>
 				</table>
@@ -173,9 +179,9 @@
 		</div>
 	</t>
 
-	<t t-name="siat_client.sync_parametricas">
+	<t t-name="siat_client.sync_parametricas" owl="1">
 		<div id="com-sync-parametricas">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3">
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
@@ -190,18 +196,18 @@
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td class="text-center"><t t-out="item_index + 1" /></td>
-					<td class="text-center"><t t-out="item.codigoClasificador" /></td>
-					<td><t t-out="item.descripcion" /></td>
+					<td class="text-center"><t t-esc="item_index + 1" /></td>
+					<td class="text-center"><t t-esc="item.codigoClasificador" /></td>
+					<td><t t-esc="item.descripcion" /></td>
 				</tr>
 				</tbody>
 				</table>
 			</div>
 		</div>
 	</t>
-	<t t-name="siat_client.actividades-documentos-sector">
+	<t t-name="siat_client.actividades-documentos-sector" owl="1">
 		<div id="com-sync-actividades-documentos-sector">
-			<h3><t t-out="props.title" /></h3>
+			<h3><t t-esc="props.title" /></h3>
 			<div class="mb-3">
 				<button type="button" class="btn btn-primary" t-on-click="getData">Sincronizar</button>
 			</div>
@@ -217,10 +223,10 @@
 				</thead>
 				<tbody>
 				<tr t-foreach="state.lista" t-as="item" t-key="item_index">
-					<td class="text-center"><t t-out="item_index + 1" /></td>
-					<td class="text-center"><t t-out="item.codigoActividad" /></td>
-					<td class="text-center"><t t-out="item.codigoDocumentoSector" /></td>
-					<td><t t-out="item.tipoDocumentoSector" /></td>
+					<td class="text-center"><t t-esc="item_index + 1" /></td>
+					<td class="text-center"><t t-esc="item.codigoActividad" /></td>
+					<td class="text-center"><t t-esc="item.codigoDocumentoSector" /></td>
+					<td><t t-esc="item.tipoDocumentoSector" /></td>
 				</tr>
 				</tbody>
 				</table>

@@ -27,20 +27,24 @@
 		#'views/account_move_views.xml',
 	],
 	'assets': {
+		'web.assets_qweb': [
+			'/siat_client/static/src/**/*.xml',
+		],
 		'web.assets_backend': [
 			'/siat_client/static/src/js/components/**/*',
 			'/siat_client/static/src/js/modals/**/*',
 			'/siat_client/static/src/js/siat_model.js',
 			'/siat_client/static/src/js/siat_model_customers.js',
 			'/siat_client/static/src/js/siat_arch_parser.js',
-			'/siat_client/static/src/js/siat_controller.js',
-			'/siat_client/static/src/js/siat_render.js',
+			#'/siat_client/static/src/js/siat_controller.js',
+			#'/siat_client/static/src/js/siat_render.js',
 			'/siat_client/static/src/js/siat_view.js',
+			'/siat_client/static/src/js/siat_view.xml',
 			'/siat_client/static/src/xml/**/*',
 		],
 	},
 	'installable': True,
 	'application': True,
-	'auto_install': True,
+	'auto_install': False,
 	'license': 'LGPL-3',
 }

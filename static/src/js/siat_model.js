@@ -201,6 +201,17 @@ class SiatModel
     }
     async anular(id, motivoId)
     {
+        const args = {id, motivoId};
+        const res = await this.orm.call('siat_client.invoice', 'void_invoice', [[]], args);
+
+        return res;
+    }
+    async revertir(id)
+    {
+        const args = {id};
+        const res = await this.orm.call('siat_client.invoice', 'revert_invoice', [[]], args);
+
+        return res;
     }
     async buscarProducto(keyword, limit)
     {
@@ -211,7 +222,7 @@ class SiatModel
 			['product_tmpl_id.name', 'ilike', keyword],
 			['barcode', 'ilike', keyword]
         ];
-        const res = await this.orm.searchRead('product.product', search_domain, 0, limit);
+        const res = await this.orm.searchRead('product.product', search_domain, [], {offset: 0, limit});
 
         return res;
     }

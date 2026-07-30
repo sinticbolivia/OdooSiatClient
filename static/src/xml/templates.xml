@@ -5,7 +5,7 @@
         <t t-esc="props.propsYouWant" />
         -->
     </t>
-	<t t-name="siat_client.app">
+	<t t-name="siat_client.app" owl="1">
 		<div class="o_action">
 			<div class="o_content">
 				<div t-if="props.view == 'sync'">

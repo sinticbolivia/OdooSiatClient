@@ -1,14 +1,22 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef } from '@odoo/owl';
+const { Component, useState } = owl;
+const {useRef} = owl.hooks;
+const { xml } = owl.tags;
 import { useService } from "@web/core/utils/hooks";
 import { Dialog } from "@web/core/dialog/dialog";
 import { AlertDialog, ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import {SiatModelCustomers} from '../siat_model_customers';
 
-export class SiatModalCustomerForm extends Component
+export class SiatModalCustomerForm extends Dialog
 {
-    static template = 'siat_client.modal-customer';
+    static bodyTemplate = 'siat_client.modal-customer';
+    static footerTemplate = xml`<div>
+        <button class="btn btn-danger o-default-button" t-on-click="close">
+            Cerrar
+        </button>
+        <button type="button" class="btn btn-primary" t-on-click="guardarCliente">Guardar</button>
+    </div>`;
     static components = { Dialog };
     static props = {
         close: {type: Function,},
@@ -18,6 +26,7 @@ export class SiatModalCustomerForm extends Component
 
     setup()
     {
+        super.setup();
         this.orm = useService('orm');
         this.dialogService = useService('dialog');
         this.data = useState(this.env.dialogData);

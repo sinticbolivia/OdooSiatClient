@@ -1,10 +1,10 @@
 /** @odoo-module **/
-import {Component, onMounted, onWillStart, xml, useState} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component} = owl;
+const {onMounted, onWillStart, useState} = owl.hooks;
 
 export class SiatSyncCodigos extends Component
 {
-    static template = 'siat_client.sync_codigos';
+    static template = 'siat_client.SiatSyncCodigos';
     static props = {
         title: {type: String, optional: true},
         sucursal: {type: Number, optional: false},
@@ -33,13 +33,13 @@ export class SiatSyncCodigos extends Component
         });
 
     }
-    async obtenerCuis()
+    async obtenerCuis(evt)
     {
         const res = await this.props.model.getCuis(this.props.sucursal, this.props.puntoventa);
         console.log(res);
         Object.assign(this.state.cuis, res.data);
     }
-    async obtenerCufd()
+    async obtenerCufd(evt)
     {
         const res = await this.props.model.getCufd(this.props.sucursal, this.props.puntoventa);
         Object.assign(this.state.cufd, res.data);

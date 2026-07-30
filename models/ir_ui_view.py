@@ -11,5 +11,5 @@ class View(models.Model):
 		default='siatClient'
 	)
 
-	def _get_view_info(self):
-		return {'siatClient': {'icon': 'fa fa-th'}} | super()._get_view_info()
+	# def _get_view_info(self):
+	#	return {'siatClient': {'icon': 'fa fa-th'}} | super()._get_view_info()

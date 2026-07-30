@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
-    <t t-name="siat_client.invoicer-top">
+    <t t-name="siat_client.invoicer-top" owl="1">
         <div id="invoicer-top" class="mb-1 shadow bg-white" style="position:sticky;top:0;z-index:50;padding:5px;border:1px solid #ececec;">
 			<div class="row p-1">
 				<div class="col-6 col-sm-3">
@@ -9,13 +9,13 @@
 							<button class="btn dropdown-toggle w-100 btn-block" type="button"
 								data-toggle="dropdown" data-bs-toggle="dropdown" data-coreui-toggle="dropdown" aria-expanded="false"
 								t-att-class="{'btn-success': !props.activeEvent, 'btn-danger': props.activeEvent}">
-								<t t-out="props.activeEvent ? 'Fuera de linea' : 'En Linea'" />
+								<t t-esc="props.activeEvent ? 'Fuera de linea' : 'En Linea'" />
 							</button>
 							<ul class="dropdown-menu" style="z-index:800;">
                                 <t t-foreach="quickEvents" t-as="event" t-key="event.id">
 								    <li>
                                         <a class="dropdown-item" href="javascript:;" t-on-click="() => this.openEvent(event)">
-                                            <t t-out="event.id + '. ' + event.label"></t>
+                                            <t t-esc="event.id + '. ' + event.label"></t>
                                         </a>
                                     </li>
                                 </t>
@@ -24,7 +24,7 @@
 					</t>
                     <t t-else="">
                         <a class="btn btn-danger w-100" href="javascript:;" t-on-click="cerrarEvento">
-                            <t t-out="props.activeEvent.evento_id &lt; 5 ? 'FUERA DE LINEA' : 'CERRAR CONTINGENCIA'" />
+                            <t t-esc="props.activeEvent.evento_id &lt; 5 ? 'FUERA DE LINEA' : 'CERRAR CONTINGENCIA'" />
                         </a>
                     </t>
 				</div>
@@ -35,7 +35,7 @@
 							<option t-att-value="0">Punto de Venta 0 (por defecto)</option>
                             <t t-foreach="props.puntosventa" t-as="pv" t-key="pv_index">
                                 <option t-att-value="pv.codigo">
-                                    (<t t-out="pv.codigo" />) <t t-out="pv.nombre" />
+                                    (<t t-esc="pv.codigo" />) <t t-esc="pv.nombre" />
                                 </option>
                             </t>
 						</select>
@@ -48,7 +48,7 @@
 								<option value="">-- moneda --</option>
                                 <t t-foreach="props.monedas" t-as="m" t-key="m_index">
                                     <option t-att-value="m.codigoClasificador">
-                                        <t t-out="m.descripcion" />
+                                        <t t-esc="m.descripcion" />
                                     </option>
                                 </t>
 							</select>
@@ -70,7 +70,7 @@
 					<b>Evento/Contingencia activa!!!</b>
 				</div>
 				<div>
-                    <b><t t-out="props.activeEvent.descripcion" />, <t t-out="props.activeEvent.fecha_inicio" /> - <t t-out="state.activeEvent.fecha_fin" /></b>
+                    <b><t t-esc="props.activeEvent.descripcion" />, <t t-esc="props.activeEvent.fecha_inicio" /> - <t t-esc="state.activeEvent.fecha_fin" /></b>
                 </div>
 				<div>Todas las facturas generadas se almacenaran localmente y no se enviaran a SIAT hasta cerrar el evento/contingencia.</div>
 			</div>

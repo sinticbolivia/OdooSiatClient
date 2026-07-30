@@ -11,20 +11,8 @@ _logger = logging.getLogger(__name__)
 class SiatAccountMove(models.Model):
     _inherit = 'account.move'
 
-    siat_invoice_id = fields.Many2one('siat.invoice')
+    invoice_siat_id = fields.Integer('SIAT ID')
 
-    invoice_cuf = fields.Char('CUF', related="siat_invoice_id.cuf", store=False)
-    invoice_cufd = fields.Char('CUFD', related="siat_invoice_id.cufd", store=False)
-    invoice_siat_id = fields.Char('SIAT ID', related="siat_invoice_id.siat_id", store=False)
-    invoice_datetime = fields.Datetime('Fecha', related="siat_invoice_id.invoice_datetime", store=False)
-    invoice_number = fields.Integer(related='siat_invoice_id.invoice_number', store=False)
-    invoice_siat_url = fields.Char(compute='_siat_invoice_url', store=False)
-
-    @api.depends('siat_invoice_id')
-    def _siat_invoice_url(self):
-        # print('invoice id', self.siat_invoice_id.id)
-        # _invoice = self.env['siat.invoice'].search([('id', '=', self.siat_invoice_id.id)])
-        self.invoice_siat_url = self.siat_invoice_id.get_siat_url()
 
     def _post(self, soft=True):
         to_post = super()._post(soft)

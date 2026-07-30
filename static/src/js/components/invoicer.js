@@ -1,5 +1,7 @@
 /** @odoo-module **/
-import {Component, onWillStart, onMounted, useState, useRef} from '@odoo/owl';
+const {Component, useState} = owl;
+const {onWillStart, onMounted, useRef} = owl.hooks;
+
 import { AlertDialog, ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import {useService} from '@web/core/utils/hooks';
 import {SiatInvoicerTop} from './invoicer-top';
@@ -115,13 +117,14 @@ export class SiatInvoicer extends Component
     }
     showOps()
     {
+        console.log('Invoicer.showOps');
         const res = this.dialogService.add(SiatInvoicerModalOptions, {
             title: 'Opciones de Facturacion',
             invoice: this.state.invoice,
             sucursales: [],
             sectores: Object.entries(this.state.sectores),
             onSectorChanged: (sector_code) => {
-                //console.log(this.state.sectores[sector_code]);
+                console.log(this.state.sectores[sector_code]);
                 this.prepareSector({code_str: sector_code, ...this.state.sectores[sector_code]});
             },
         });
@@ -153,9 +156,10 @@ export class SiatInvoicer extends Component
     }
     onCustomerSelected(customer, nit)
     {
+        console.log(customer, nit);
         this.state.invoice.customer_id = customer.id;
         this.state.invoice.customer = `${customer.firstname} ${customer.lastname}`.trim();
-        this.state.invoice.nit_ruc_nif = nit;
+        this.state.invoice.nit_ruc_nif = nit || '';
     }
     calculateTotals()
     {

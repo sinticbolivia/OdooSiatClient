@@ -59,6 +59,51 @@ class SiatInvoices(models.Model):
             raise UserError(str(e))
 
     @api.model
+    def void_invoice(self, *args, **kwargs):
+        invoice_id = kwargs.get('id')
+        motivo_id = kwargs.get('motivoId')
+        try:
+            siat_api = FactoryClient.instance_service()
+            res = siat_api.anular_factura(int(invoice_id), int(motivo_id))
+            _logger.info('SIAT CLIENT VOID INVOICE RESPONSE: %s', res)
+            if res.get('status') == 'error':
+                raise UserError('SIAT CLIENT ERROR: ' + res.get('error'))
+
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT INVOICE GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def revert_invoice(self, *args, **kwargs):
+        invoice_id = kwargs.get('id')
+        try:
+            siat_api = FactoryClient.instance_service()
+            res = siat_api.revertir(int(invoice_id))
+            _logger.info('SIAT CLIENT REVERT INVOICE RESPONSE: %s', res)
+            if res.get('status') == 'error':
+                raise UserError('SIAT CLIENT ERROR: ' + res.get('error'))
+
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT REVERT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT REVERT INVOICE GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
     def search_customer(self, *args, **kwargs):
         keyword = kwargs.get('keyword', '')
 

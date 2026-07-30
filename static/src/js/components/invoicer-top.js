@@ -1,5 +1,6 @@
 /** @odoo-module **/
-import {Component, onWillStart, onMounted, useState, useRef} from '@odoo/owl';
+const {Component} = owl;
+const {onWillStart, onMounted, useState, useRef} = owl.hooks;
 import {useService} from '@web/core/utils/hooks';
 import {SiatModel} from '../siat_model';
 
@@ -18,6 +19,7 @@ export class SiatInvoicerTop extends Component
 
     setup()
     {
+        console.log('SiatInvoicerTop.setup', this.props.invoice);
         this.quickEvents = [
             {id: 1, label: 'CORTE DEL SERVICIO DE INTERNET'},
             {id: 2, label: 'INACCESIBILIDAD AL SERVICIO WEB DE LA ADMINISTRACIÓN TRIBUTARIA'},

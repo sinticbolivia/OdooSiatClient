@@ -1,6 +1,7 @@
 /** @odoo-module **/
-import {Component, onMounted, useState, xml} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component, useState} = owl;
+const {onMounted} = owl.hooks;
+const {xml} = owl.tags;
 
 class DetalleBoletoAereo extends Component
 {
@@ -78,13 +79,13 @@ class DetalleBoletoAereo extends Component
 class TotalsBoletoAereo extends Component {
 	static template = xml`<div class="row border-bottom">
 	    <div class="col-12 col-sm-9 text-end text-right"><b>Subtotal:</b></div>
-        <div class="col-12 col-sm-3 text-end text-right"><b><t t-out="props.invoice.subtotal.toFixed(2)" /></b></div>
+        <div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="props.invoice.subtotal.toFixed(2)" /></b></div>
 
         <div class="col-12 col-sm-9 text-end text-right"><b>Total Base Credito Fiscal:</b></div>
-        <div class="col-12 col-sm-3 text-end text-right"><b><t t-out="props.invoice.total.toFixed(2)" /></b></div>
+        <div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="props.invoice.total.toFixed(2)" /></b></div>
 
         <div class="col-12 col-sm-9 text-end text-right"><b>Credito fiscal:</b></div>
-        <div class="col-12 col-sm-3 text-end text-right"><b><t t-out="props.invoice.total_tax.toFixed(2)" /></b></div>
+        <div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="props.invoice.total_tax.toFixed(2)" /></b></div>
 	</div>`;
 	static props = {
 	    invoice: {type: Object, optional: false},

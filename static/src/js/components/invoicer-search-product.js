@@ -1,11 +1,11 @@
 /** @odoo-module **/
-import {Component, onWillStart, onMounted, useState, useRef} from '@odoo/owl';
+const {Component, onWillStart, onMounted, useState, useRef} = owl;
 import {useService} from '@web/core/utils/hooks';
 import {SiatModel} from '../siat_model';
 
 export class SiatInvoicerSearchProduct extends Component
 {
-    static template = 'siat_client.invoicer-search-customer';
+    static template = 'siat_client.invoicer-search-product';
     static props = {
         invoice: {type: Object, optional: false},
         onProductAdded: Function,

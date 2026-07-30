@@ -1,7 +1,10 @@
 /** @odoo-module **/
 
-import {Component, onMounted, onWillStart, xml, useState, markup, useRef} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component, useState/*, markup, useRef*/ } = owl;
+const {onMounted, onWillStart } = owl.hooks;
+console.log('owl', owl);
+import { useService } from "@web/core/utils/hooks";
+
 import {SiatSyncCodigos} from './sync_coms/sync_codigos';
 import {SiatSyncActividades} from './sync_coms/sync_actividades';
 import {SiatSyncLeyendas} from './sync_coms/sync_leyendas';
@@ -24,11 +27,10 @@ export class SiatSync extends Component
 {
     static template = 'siat_client.sync';
     static props = {};
-    static components = {SiatSyncCodigos, SiatSyncActividades};
+    static components = {};
 
     setup()
     {
-        //console.log('SiatSync', SiatSyncCodigos);
         this.menus = [
             {id: 1, label: 'Codigos', com: SiatSyncCodigos},
             {id: 2, label: 'Actividades', com: SiatSyncActividades},
@@ -51,6 +53,7 @@ export class SiatSync extends Component
         this.com = null;//{id: null, com: null};
         this.com_props = {};
         this.model = new SiatModel(this.orm);
+
         this.state = useState({
             com: null, //this.menus[0], //{id: null, com: null},
             com_props: {},
@@ -67,22 +70,34 @@ export class SiatSync extends Component
         });
         onMounted( () => {
             console.log('onMounted', this.com);
-            //this.com = this.menus[0];
             this.showComponent(this.menus[0]);
         });
     }
+    showComFromAttr(evt)
+    {
+        console.log('evt', evt.target);
+        this.showComFromIndex(evt.target.dataset.item);
+    }
+    showComFromIndex(index)
+    {
+        this.showComponent(this.menus[index]);
+    }
     showComponent(menuItem)
     {
+        this.state.com = null;
         console.log('SiatSync.showComponent', menuItem);
         if( !menuItem.com )
             return false;
-        this.state.com_props = {
-            title: menuItem.label,
-            sucursal: parseInt(this.state.priv_sucursal_id),
-            puntoventa: parseInt(this.state.priv_puntoventa_id),
-            model: this.model,
-        };
-        this.state.com = menuItem;
+        setTimeout(() => {
+            this.state.com_props = {
+                title: menuItem.label,
+                sucursal: parseInt(this.state.priv_sucursal_id),
+                puntoventa: parseInt(this.state.priv_puntoventa_id),
+                model: this.model,
+            };
+            this.state.com = menuItem;
+        }, 500);
+
     }
     async getBranches()
     {

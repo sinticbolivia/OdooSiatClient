@@ -1,5 +1,6 @@
 /** @odoo-module **/
-import {Component, onWillStart, onMounted, useState} from '@odoo/owl';
+const {Component} = owl;
+const {onMounted, onWillStart, useState } = owl.hooks;
 
 export class SiatSyncActividadesDocumentosSector extends Component
 {

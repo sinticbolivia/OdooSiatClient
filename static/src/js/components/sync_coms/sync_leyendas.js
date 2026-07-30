@@ -1,6 +1,6 @@
 /** @odoo-module **/
-import {Component, onMount, onWillStart, xml, useState} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component, useState} = owl;
+const {onMounted, onWillStart} = owl.hooks;
 
 export class SiatSyncLeyendas extends Component
 {

@@ -1,15 +1,14 @@
 /** @odoo-module */
-import { XMLParser, visitXML, xml } from "@web/core/utils/xml";
-//const xml = require('@web/core/utils/xml');
+import { XMLParser } from "@web/core/utils/xml";
 
-export class SiatArchParser //extends XMLParser
+export class SiatArchParser extends XMLParser
 {
-    parse(arch, models, modelName, jsClass)
+    parse(arch)
     {
-        console.log('SiatArchParser.parse', arch, arch.getAttribute("view"));
-        //const xmlDoc = xml.parseXML(arch);
+        console.log('SiatArchParser.parse', arch);
+        const xmlDoc = this.parseXML(arch);
         //console.log('xmlDoc', xmlDoc);
-        const view = arch.getAttribute("view");
+        const view = xmlDoc.getAttribute("view");
         return {
             view,
         };

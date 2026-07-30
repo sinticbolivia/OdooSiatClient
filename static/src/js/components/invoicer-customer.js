@@ -1,5 +1,6 @@
 /** @odoo-module **/
-import {Component, onWillStart, onMounted, useState, useRef, onWillUpdateProps, onPatched} from '@odoo/owl';
+const {Component, useState} = owl;
+const {onWillStart, onMounted, useRef, onWillUpdateProps, onPatched} = owl.hooks;
 import {useService} from '@web/core/utils/hooks';
 import {SiatModelCustomers} from '../siat_model_customers';
 import {SiatModalCustomerForm} from '../modals/modal-customer-form';
@@ -25,19 +26,21 @@ export class SiatInvoicerCustomer extends Component
             keyword_nit: '',
             customers_list: [],
         });
-
+        /*
         onWillUpdateProps((newProps) => {
             // Logic to run before state updates
             console.log("State or props will change:", newProps);
         });
-
+        /*
         onPatched(() => {
             // Logic to run after the DOM has updated
             console.log("Component DOM has been patched", arguments);
         });
+        */
     }
-    async buscarCliente(by, evt)
+    async buscarCliente(evt)
     {
+        const by = 'customer';
         //console.log(evt.keyCode);
         if( this.searchTimeout )
             clearTimeout(this.searchTimeout);

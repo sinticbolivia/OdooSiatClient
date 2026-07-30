@@ -1,6 +1,7 @@
 /** @odoo-module **/
-import {Component, onMounted, useState, xml} from '@odoo/owl';
-import {useService} from '@web/core/utils/hooks';
+const {Component, useState} = owl;
+const {onMounted} = owl.hooks;
+const { xml } = owl.tags;
 
 class DetalleAlquiler extends Component
 {
@@ -9,7 +10,7 @@ class DetalleAlquiler extends Component
 			<div class="col-12 col-sm-3">
 				<div class="mb-2">
 					<label>Periodo Facturado</label>
-					<input type="text" class="form-control" required v-model="invoice.data.custom_fields.periodoFacturado" />
+					<input type="text" class="form-control" required="" v-model="invoice.data.custom_fields.periodoFacturado" />
 				</div>
 			</div>
 		</div>

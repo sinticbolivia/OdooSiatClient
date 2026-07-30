@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <templates>
-    <t t-name="siat_client.invoicer">
+    <t t-name="siat_client.invoicer" owl="1">
         <div id="com-invoicer" style="position:relative;">
             <SiatInvoicerTop puntosventa="state.puntosventa" monedas="state.monedas" invoice="state.invoice"
 				activeEvent="state.activeEvent"
-                onOpsClicked="() => this.showOps()"
+                onOpsClicked="showOps"
                 />
             <form t-ref="forminvoice" novalidate="novalidate">
 				<div class="container-fluid">
 					<SiatInvoicerCustomer tipos_documentos="state.tipos_documentos" invoice="state.invoice"
-						onCustomerSelected="(customer, nit) => this.onCustomerSelected(customer, nit)"
+						onCustomerSelected="(item, nit) => this.onCustomerSelected(item, nit)"
 						/>
 					<div id="cafc-data" class="row" t-if="state.activeEvent and [5, 6, 7].indexOf(state.activeEvent.evento_id) != -1">
 						<div class="col-6 col-sm-3">
@@ -41,7 +41,7 @@
 
 					<div class="row border-bottom">
 						<div class="col-12"><h2>Detalle</h2></div>
-						<div>Total Items: <t t-out="state.invoice.items.length" /></div>
+						<div>Total Items: <t t-esc="state.invoice.items.length" /></div>
 						<div class="col-sm-6 text-center"><b>Producto</b></div>
 						<div class="col-sm-2 text-center"><b>Cant.</b></div>
 						<div class="col-sm-2 text-center"><b>Precio</b></div>
@@ -82,7 +82,7 @@
 													<option value="">-- actividad --</option>
 													<t t-foreach="state.lista_actividades" t-as="a" t-key="a_index">
 														<option t-att-value="a.codigoCaeb">
-															<t t-out="a.descripcion" />
+															<t t-esc="a.descripcion" />
 														</option>
 													</t>
 												</select>
@@ -94,7 +94,7 @@
 												<select class="form-control form-select" required="" t-model="item.codigo_producto_sin">
 													<option value="">-- producto SIN --</option>
 													<option t-foreach="state.sinProducts" t-as="sp" t-key="sp_index" t-att-value="sp.codigoProducto">
-														<t t-out="sp.descripcionProducto" />
+														<t t-esc="sp.descripcionProducto" />
 													</option>
 												</select>
 											</div>
@@ -104,7 +104,7 @@
 												<label>Unidad Medida</label>
 												<select class="form-control form-select" t-model="item.unidad_medida">
 													<t t-foreach="state.unidadesMedida" t-as="um" t-key="um_index">
-														<option t-att-value="um.codigoClasificador"><t t-out="um.descripcion" /></option>
+														<option t-att-value="um.codigoClasificador"><t t-esc="um.descripcion" /></option>
 													</t>
 												</select>
 											</div>
@@ -131,12 +131,12 @@
 							<t t-else="">
 								<div class="row border-bottom p-2" style="position:relative;">
 									<div class="col-12 col-sm-6">
-										<div class="fw-bold text-primary" style="font-size:13px;">Codigo: <t t-out="item.product_code" /></div>
-										<div><t t-out="item.product_name" /></div>
+										<div class="fw-bold text-primary" style="font-size:13px;">Codigo: <t t-esc="item.product_code" /></div>
+										<div><t t-esc="item.product_name" /></div>
 									</div>
-									<div class="col-12 col-sm-2"><div class="text-center"><t t-out="item.quantity" /></div></div>
-									<div class="col-12 col-sm-2"><div class="text-end"><t t-out="item.price.toFixed(2)" /></div></div>
-									<div class="col-12 col-sm-2"><div class="text-end"><t t-out="item.total.toFixed(2)" /></div></div>
+									<div class="col-12 col-sm-2"><div class="text-center"><t t-esc="item.quantity" /></div></div>
+									<div class="col-12 col-sm-2"><div class="text-end"><t t-esc="item.price.toFixed(2)" /></div></div>
+									<div class="col-12 col-sm-2"><div class="text-end"><t t-esc="item.total.toFixed(2)" /></div></div>
 									<div class="col-12 col-sm-12">
 										<button type="button" class="btn btn-sm btn-primary" t-on-click="() => this.editItem(item_index)"><i class="fa fa-edit"></i></button>
 										<button type="button" class="btn btn-sm btn-danger" t-on-click="() => this.removeItem(item_index)"><i class="fa fa-trash"></i></button>
@@ -154,7 +154,7 @@
 						<t t-if="!state.com_sector_totals">
 							<div class="row border-bottom">
 								<div class="col-12 col-sm-9 text-end text-right"><b>Subtotal:</b></div>
-								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.subtotal.toFixed(2)" /></b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="state.invoice.subtotal.toFixed(2)" /></b></div>
 
 								<t t-if="state.with_giftcard">
 									<div class="col-12 col-sm-9 text-end text-right">
@@ -170,10 +170,10 @@
 								</div>
 
 								<div class="col-12 col-sm-9 text-end text-right"><b>Total Base Credito Fiscal:</b></div>
-								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.total.toFixed(2)" /></b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="state.invoice.total.toFixed(2)" /></b></div>
 
 								<div class="col-12 col-sm-9 text-end text-right"><b>Credito fiscal:</b></div>
-								<div class="col-12 col-sm-3 text-end text-right"><b><t t-out="state.invoice.total_tax.toFixed(2)" /></b></div>
+								<div class="col-12 col-sm-3 text-end text-right"><b><t t-esc="state.invoice.total_tax.toFixed(2)" /></b></div>
 							</div>
 						</t>
 						<t t-else="">
@@ -188,7 +188,7 @@
 								<option value="">-- metodo de pago --</option>
 								<t t-foreach="state.metodos_pago" t-as="mp" t-key="mp_index">
 									<option t-att-value="mp.codigoClasificador">
-										<t t-out="mp.descripcion" /> (<t t-out="mp.codigoClasificador" />)
+										<t t-esc="mp.descripcion" /> (<t t-esc="mp.codigoClasificador" />)
 									</option>
 								</t>
 							</select>

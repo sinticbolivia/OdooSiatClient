@@ -6,7 +6,10 @@ from odoo.exceptions import UserError
 from itertools import groupby
 from operator import itemgetter
 from datetime import date
+import logging
 from ..classes.FactoryClient import FactoryClient
+
+_logger = logging.getLogger(__name__)
 
 
 class ProductTemplate(models.Model):
@@ -14,25 +17,18 @@ class ProductTemplate(models.Model):
 
 	# unidad_medida = fields.Integer(default='0')
 	# unidad_medida_selector = fields.Selection(_get_unidades_medida, store=False, readonly=False, compute='_compute_unidad_medida_selector')
-	unidad_medida = fields.Selection('_get_unidades_medida', readonly=False)
-	actividad_economica = fields.Selection('_get_actividades', readonly=False)
-	# codigo_producto_sin = fields.Selection('_get_productos_sin', readonly=False)
-	codigo_producto_sin = fields.Integer(default=0)
-
-	#'''
-	codigo_producto_sin_selector = fields.Selection(
+	unidad_medida = fields.Selection(selection='_get_unidades_medida', default='0')
+	actividad_economica = fields.Selection(selection='_get_actividades', default='')
+	# codigo_producto_sin = fields.Integer(default=0)
+	codigo_producto_sin = fields.Selection(
 		'_get_productos_sin',
-		store=False,
-		readonly=False,
-		compute='_compute_codigo_producto_sin_selector'
+		required=False,
 	)
-	#'''
-
-	# siat_invoice_item_id = fields.One2many('siat.invoiceitem', 'product_id')
 
 	def _get_actividades(self):
 
 		data = [('', '-- actividad economica --')]
+
 		try:
 			api_sync = FactoryClient.instance_sync_service()
 			res = api_sync.actividades()
@@ -46,12 +42,11 @@ class ProductTemplate(models.Model):
 					)
 				)
 		except Exception as e:
-			print('ERROR __get_actividades', str(e))
+			_logger.error('ERROR _get_actividades: %s', str(e))
 
 		return data
 
 	def _get_unidades_medida(self):
-		# print('REQUEST', type(request), hasattr(request, 'env'))
 		data = [('0', '-- unidad medida --')]
 
 		try:
@@ -62,13 +57,13 @@ class ProductTemplate(models.Model):
 			for actividad in res.get('data')['RespuestaListaParametricas']['listaCodigos']:
 				data.append((str(actividad.get('codigoClasificador')), actividad.get('descripcion')))
 		except Exception as e:
-			print('ERROR __get_unidades_medida', str(e))
+			_logger.error('ERROR _get_unidades_medida: %s', str(e))
 
 		return data
 
 	def _get_productos_sin(self):
-		# print('ARG', arg)
-		codigos_sin = [('0', '-- producto sin --')]
+		codigos_sin = [(0, '-- producto sin --')]
+
 		try:
 			api_sync = FactoryClient.instance_sync_service()
 			res = api_sync.lista_productos()
@@ -77,32 +72,20 @@ class ProductTemplate(models.Model):
 			codes = []
 
 			for item in res.get('data')['RespuestaListaProductos']['listaCodigos']:
-				_code = '{0}:{1}'.format(item.get('codigoActividad'), item.get('codigoProducto'))
-				print(_code)
+				#_code = '{0}:{1}'.format(item.get('codigoActividad'), item.get('codigoProducto'))
+				_code = int(item.get('codigoProducto', 0))
+				# print(_code)
 				if _code in codes:
 					continue
 
 				codes.append(_code)
 				codigos_sin.append(
-					(_code, '{0} ({1})'.format(item.get('descripcionProducto'), item.get('codigoActividad')))
+					(_code, '{0} | {1}'.format(item.get('descripcionProducto'), item.get('codigoActividad')))
 				)
 		except Exception as e:
-			print('ERROR __get_productos_sin', str(e))
+			_logger.error('ERROR __get_productos_sin: %s', str(e))
 
 		return codigos_sin
 
-	@api.onchange('codigo_producto_sin_selector')
-	def _onchange_codigo_producto_sin_selector(self):
-		if self.codigo_producto_sin_selector is False:
-			return
-			
-		_code = self.codigo_producto_sin_selector
-		if ':' not in _code:
-			self.codigo_producto_sin = 0
-			return
-
-		actividad, codigo = _code.split(':')
-		print('CODIGO', codigo)
-		self.codigo_producto_sin = int( codigo )
 		
 			

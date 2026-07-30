@@ -1,14 +1,26 @@
 /** @odoo-module **/
 
-import { Component, useState } from '@odoo/owl';
+const { Component, useState } = owl;
+const {xml} = owl.tags;
 import { useService } from "@web/core/utils/hooks";
 import { Dialog } from "@web/core/dialog/dialog";
 import { AlertDialog, ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 
-export class ModalVoid extends Component
+
+export class ModalVoid extends Dialog//Component
 {
-    static template = 'siat_client.modal-void';
-    static components = { Dialog };
+    static bodyTemplate = 'siat_client.modal-void';
+    static footerTemplate = xml`<div>
+        <button class="btn btn-danger o-default-button" t-on-click="props.close()">
+            <t>Cerrar</t>
+        </button>
+        <button type="button" class="btn btn-primary" t-on-click="onVoid">Anular</button>
+    </div>`;
+    static renderHeader = true;
+    static renderFooter = true;
+    static title = '';
+    static components = { /*Dialog*/ };
+
     static props = {
         close: {type: Function,},
         title: {type: String, optional: false},
@@ -19,7 +31,9 @@ export class ModalVoid extends Component
     };
     setup()
     {
-        console.log('motivos anulacion', this.props.motivos);
+        super.setup();
+        this.title = this.props.title;
+        //console.log('motivos anulacion', this.props.motivos);
         this.dialogService = useService('dialog');
         this.state = useState({
             obj: {
@@ -38,9 +52,9 @@ export class ModalVoid extends Component
     {
         try
         {
-            this.state.obj.invoice_id = this.props.note.id;
+            this.state.obj.invoice_id = this.props.invoice.invoice_id;
             if( !this.state.obj.invoice_id )
-                throw {error: 'Identificador de documento invalido'};
+                throw {error: 'Identificador de factura invalido'};
             if( !this.state.obj.motivo_id )
                 throw {error: 'Debe seleccionar un motivo de anulacion para el documento'};
             this.props.onVoid(this.state.obj);
