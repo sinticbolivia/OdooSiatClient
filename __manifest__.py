@@ -3,7 +3,7 @@
 {
 	'name': 'Cliente Facturacion SIAT',
 	'countries': ['bo'],
-	'version': '1.0.1',
+	'version': '1.0.2',
 	'summary': 'Cliente Facturacion SIAT',
 	'sequence': 10,
 	'author': 'SinticBolivia',
