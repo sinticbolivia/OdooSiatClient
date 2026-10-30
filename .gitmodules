@@ -1,0 +1,3 @@
+[submodule "libs/siat_client"]
+	path = libs/siat_client
+	url = https://github.com/sinticbolivia/MonoInvoicesPythonApiClient.git
