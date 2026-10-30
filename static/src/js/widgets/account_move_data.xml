@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.account-move-data" owl="1">
+        <h2>Informacion de la Factura SIAT</h2>
+        <div t-if="state.invoice" class="row">
+            <div class="col-12 col-sm-6">
+                <div class="mb-1">
+                    <label>Nro. Factura</label>
+                    <input type="text" class="form-control" readonly="" />
+                </div>
+                <div class="mb-1">
+                    <label>CUFD</label>
+                    <input type="text" class="form-control" readonly="" />
+                </div>
+                <div class="mb-1">
+                    <label>CUF</label>
+                    <input type="text" class="form-control" readonly="" />
+                </div>
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="mb-1">
+                    <label>Fecha</label>
+                    <input type="text" class="form-control" readonly="" />
+                </div>
+                <div class="mb-1">
+                    <label>SIAT URL</label>
+                    <input type="text" class="form-control" readonly="" />
+                </div>
+            </div>
+        </div>
+        <div t-elif="!props.record.data.invoice_siat_id">
+            <div class="alert alter-danger">La venta no tiene una factura generada.</div>
+        </div>
+        <div t-else="">
+            <div class="alert alter-info">Obteniendo datos de la factura...</div>
+        </div>
+    </t>
+</templates>

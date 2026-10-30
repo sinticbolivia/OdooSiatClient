@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.modal-void" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">-->
+            <div id="com-siat-void-invoice">
+                <form ref="form" class="" novalidate="true">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="mb-3">
+                                <label>Cliente</label>
+                                <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.customer" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="mb-3">
+                                <label>Nro. Factura</label>
+                                <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.invoice_number" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="mb-3">
+                                <label>Fecha emision</label>
+                                <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.invoice_date_time" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="mb-3">
+                                <label>Sucursal</label>
+                                <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.codigo_sucursal" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="mb-3">
+                                <label>Punto de Venta</label>
+                                <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.punto_venta" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-3">
+                        <label>CUF</label>
+                        <input type="text" readonly="true" class="form-control" t-att-value="props.invoice.cuf" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Motivo anulacion</label>
+                        <select class="form-control form-select" required="true" pattern="[1-9]+" t-on-change="handleMotivo">
+                            <option value="0">-- motivo anulacion --</option>
+                            <t t-foreach="props.motivos" t-as="m" t-key="m.codigoClasificador">
+                                <option t-att-value="m.codigoClasificador"><t t-esc="m.descripcion" /></option>
+                            </t>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-ops" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <div class="form-grooup mb-2">
+                <label>Configuracion</label>
+                <select class="form-control form-select" t-model="state.config_id" t-on-change="onConfigChanged">
+                    <option value="0">-- configuracion --</option>
+                    <t t-foreach="props.configurations" t-as="config" t-key="config_index">
+                        <option t-att-value="config.id"><t t-esc="config.name" /></option>
+                    </t>
+                </select>
+            </div>
+            <div class="form-grooup mb-2">
+                <label>Sucursal</label>
+                <select class="form-control form-select" t-model="props.invoice.codigo_sucursal">
+                    <option value="0">Sucursal Principal 0 (por defecto)</option>
+                    <t t-foreach="props.sucursales" t-as="s" t-key="s_index">
+                        <option t-att-value="s.codigo"><t t-esc="s.nombre" /></option>
+                    </t>
+                </select>
+            </div>
+            <div class="form-group mb-2">
+                <label>Documento Sector</label>
+                <select class="form-control form-select" t-model.number="props.invoice.codigo_documento_sector" t-ref="sectoresEl"
+                    t-on-change="onSectorChanged">
+                    <option value="">-- documento sector --</option>
+                    <t t-foreach="props.sectores" t-as="ds" t-key="ds_index">
+                        <option t-att-value="ds[1].code" t-att-data-code="ds[0]">
+                            <t t-esc="ds[1].label" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-danger o-default-button" t-on-click="() => this.props.close()">
+                    <t>Cerrar</t>
+                </button>
+            </t>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-customer" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <form t-ref="formcustomer" novalidate="">
+                <div class="mb-2">
+                    <label>Nombres</label>
+                    <input type="text" class="form-control" t-model="state.customer.firstname" />
+                    <div class="invalid-feedback">Ingrese el nombre del cliente</div>
+                </div>
+                <div class="mb-2">
+                    <label>Apellidos/Razon Social</label>
+                    <input type="text" class="form-control" t-model="state.customer.lastname" required="" />
+                    <div class="invalid-feedback">Ingrese el apellido del cliente</div>
+                </div>
+                <div class="mb-2">
+                    <label>NIT/CI</label>
+                    <input type="text" class="form-control" t-model="state.customer.vat" required="" />
+                    <div class="invalid-feedback">Ingrese el NIT/CI del cliente</div>
+                </div>
+                <div class="mb-2">
+                    <label>Direccion</label>
+                    <input type="text" class="form-control" t-model="state.customer.street" />
+                    <div class="invalid-feedback">Ingrese la direccion del cliente</div>
+                </div>
+                <div class="mb-2">
+                    <label>Email</label>
+                    <input type="email" class="form-control" t-model="state.customer.email" />
+                </div>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger" t-on-click="() => this.props.close()">Cancelar</button>
+                <button type="button" class="btn btn-primary" t-on-click="guardarCliente">Guardar</button>
+            </t>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-print-invoice" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <div class="col-3 text-center">
+                <i class="fa fa-print" style="font-size:50px;"></i>
+            </div>
+            <div class="col-9">
+                <p>La factura fue generada correctamente</p>
+                <p>Desea imprimir la factura?</p>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger o-default-button" t-on-click="() => this.props.close()">
+                    Cerrar
+                </button>
+                <t t-if="props.invoice">
+                    <a t-att-href="props.invoice.print_url"
+                        target="_blank"
+                        class="btn btn-primary"
+                        t-on-click="() => data.close()">
+                        Imprimir
+                    </a>
+                    <a t-att-href="print_url_ticket" target="_blank" class="btn btn-warning" t-on-click="() => this.props.close()">
+                        Imprimir Ticket
+                    </a>
+                    <a t-att-href="print_url_receipt" target="_blank" class="btn btn-success" t-on-click="() => this.props.close()">
+                        Imprimir Comprobante
+                    </a>
+                </t>
+            </t>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-tarjeta" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <form t-ref="formtarjeta" novalidate="">
+                <p>Ingrese los datos de la tarjeta de credito/debito</p>
+                <div class="mb-3">
+                    <label>Nro. de Tarjeta</label>
+                    <div class="input-group">
+                        <span class="input-group-addon input-group-text "><i class="fa fa-credit-card"></i></span>
+                        <input type="text" class="form-control" required="" pattern="[0-9]{16}"
+                            maxlength="16" t-ref="inputcard"
+                            t-on-keydown="(ev) => this.handleKeydown(ev)"
+                            t-on-keyup="(ev) => this.handleKeyup(ev)"
+                        />
+                        <div class="invalid-feedback">Debe ingresar un numero de tarjeta valido</div>
+                    </div>
+                </div>
+                <t t-set-slot="footer">
+                    <button type="button" class="btn btn-danger" t-on-click="() => this.props.close()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" t-on-click="save">Continuar</button>
+                </t>
+            </form>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-excepcion" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <div class="col-3 text-center">
+                <i class="fa fa-exclamation" style="font-size:50px;"></i>
+            </div>
+            <div class="col-9">
+                <p>El NIT del cliente no es valido</p>
+                <p>Desea generar la factura de todas formas?</p>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-danger" t-on-click="() => this.props.close()">Cerrar</button>
+                <button type="button" class="btn btn-primary" t-on-click="submit">
+                    Generar Factura
+                </button>
+            </t>
+        </Dialog>
+    </t>
+    <t t-name="siat_client.modal-evento" owl="1">
+        <Dialog t-props="{'title': props.title, footer: true}">
+            <form t-ref="formnew" novalidate="">
+                <!--
+                <div class="modal-header">
+                    <h5 class="modal-title">Registrar nuevo evento/contingencia</h5>
+                    <button class="close btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                -->
+                    <div class="mb-3">
+                        <label>Sucursal</label>
+                        <select class="form-control form-select" required="" t-model="state.evento.sucursal_id"
+                            t-on-change="sucursalChanged">
+                            <option value="">-- sucursal --</option>
+                            <option value="0">Sucursal Principal 0 (por defecto)</option>
+                            <t t-foreach="props.sucursales" t-as="s" t-key="s.code">
+                                <option t-att-value="s.code"><t t-esc="s.name" /></option>
+                            </t>
+                        </select>
+                        <div class="invalid-feedback">Debe seleccionar el tipo de moneda</div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Punto de Venta</label>
+                        <select class="form-control form-select" required="" t-model.number="state.evento.puntoventa_id"
+                            t-on-change="puntoventaChanged">
+                            <option value="">-- tipo --</option>
+                            <option value="0">Punto de venta 0</option>
+                            <t t-foreach="props.puntosventa" t-as="pv" t-key="pv.codigo">
+                                <option t-att-value="pv.codigo">
+                                    (<t t-esc="pv.codigo" />) <t t-esc="pv.nombre" /> (<t t-esc="pv.tipo" />)
+                                </option>
+                            </t>
+                        </select>
+                        <div class="invalid-feedback">Necesita seleccionar un punto de venta</div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Tipo de Evento</label>
+                        <select class="form-control form-select no-select2" required="" t-model="state.evento.evento_id"
+                            t-on-change="tipoEventoChanged">
+                            <option value="0">-- tipo evento --</option>
+                            <t t-foreach="props.eventos" t-as="evt" t-key="evt.codigoClasificador">
+                                <option t-att-value="evt.codigoClasificador">
+                                    (<t t-esc="evt.codigoClasificador" />) <t t-esc="evt.descripcion" />
+                                </option>
+                            </t>
+                        </select>
+                        <div class="invalid-feedback">Necesita seleccionar el tipo de evento</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Fecha Inicio</label>
+                                <input type="date" name="" value="" class="form-control" t-ref="eventofechainicio"
+                                     required="" />
+                                <div class="invalid-feedback">Necesita seleccionar una fecha de inicio del evento</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Hora Inicio</label>
+                                <input type="time" name="" value="" class="form-control" t-ref="eventohorainicio"
+                                     required="" />
+                                <div class="invalid-feedback">Necesita seleccionar una hora de inicio del evento</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div t-if="state.esContingencia">
+                        <div class="mb-2">
+                            <label>CUFD</label>
+                            <select class="form-control form-select no-select2" t-model="state.evento.cufd_evento"
+                                t-on-change="cufdChanged">
+                                <option value="">-- seleccionar un CUFD --</option>
+                                <t t-foreach="state.cufds" t-as="cufd" t-key="cufd.id">
+                                    <option t-att-value="cufd.codigo">
+                                        <t t-esc="cufd.creation_date" /> - <t t-esc="cufd.fecha_vigencia" />
+                                    </option>
+                                </t>
+                            </select>
+                            <div class="invalid-feedback">Necesita seleccionar CUFD para el evento</div>
+                        </div>
+                        <div t-if="state.evento.cufd_evento" class="mb-1">
+                            <div class="p-2 border circle"><b>CODIGO:</b> <t t-esc="state.evento.cufd_evento" /></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Fecha Fin</label>
+                                    <input type="date" name="" value="" class="form-control" t-ref="eventofechafin" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Hora Fin</label>
+                                    <input type="time" name="" value="" class="form-control" t-ref="eventohorafin" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                <!--
+                </div>
+                <div class="modal-footer">
+
+                </div>
+                -->
+            </form>
+        </Dialog>
+    </t>
+</templates>

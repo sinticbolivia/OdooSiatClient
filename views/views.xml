@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="siatclient_sync" model="ir.ui.view">
+        <field name="name">siatclient.sync</field>
+        <field name="model">siat_client.sync</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="sync" />
+        </field>
+    </record>
+    <record id="siatclient_events" model="ir.ui.view">
+        <field name="name">siatclient.invoices</field>
+        <field name="model">siat_client.event</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="events" />
+        </field>
+    </record>
+    <record id="siatclient_invoices" model="ir.ui.view">
+        <field name="name">siatclient.invoices</field>
+        <field name="model">siat_client.invoice</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="invoices" />
+        </field>
+    </record>
+    <record id="siatclient_invoicer" model="ir.ui.view">
+        <field name="name">siatclient.invoicer</field>
+        <field name="model">siat_client.invoice</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <siatClient view="invoicer" />
+        </field>
+    </record>
+    <record id="siatclient_config" model="ir.ui.view">
+        <field name="name">siatclient.config</field>
+        <field name="model">siat_client.config</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+			<list string="Configuracion SIAT" create="1">
+                <field name="name" />
+				<field name="endpoint" />
+				<field name="username" />
+				<field name="password" invisible="1" />
+                <field name="token" invisible="1" />
+                <field name="company_id" />
+                <field name="enabled" />
+                <field name="is_default" />
+			</list>
+            <!--
+            <form string="Configuracion SIAT" create="1">
+				<field name="endpoint" />
+				<field name="username" />
+				<field name="password" password="True" />
+			</form>
+			-->
+		</field>
+    </record>
+</odoo>

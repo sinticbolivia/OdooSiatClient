@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="SiatPaymentDataScreen" owl="1">
+        <div class="siat-payment-data-screen screen clientlist-screen" t-att-class="{ oe_hidden: !props.isShown }">
+            <div class="screen-content">
+                <div class="top-content">
+                    <div class="button back" t-on-click="showScreen('PaymentScreen')">
+                        <i class="fa fa-angle-double-left fa-fw"></i>
+                        <span class="back_text">Back</span>
+                    </div>
+                    <div class="top-content-center"><h1>Datos de Facturacion SIAT</h1></div>
+                    <div class="button next">
+                        <span class="next_text">Validate</span>
+                        <i class="fa fa-angle-double-right fa-fw"></i>
+                    </div>
+                </div>
+                <div class="full-content">
+                    <div class="client-details">
+                        <div class="client-details-left">
+                            <div class="client-detail">
+                                <label class="label">Nombre/Razon Social</label>
+                                <input type="text" name="" value="" class="detail" t-model="env.siatData.customer" />
+                            </div>
+                            <div class="client-detail">
+                                <label class="label">NIT/CI</label>
+                                <input type="text" name="" value="" class="detail" t-model="env.siatData.nit_ruc_nif" />
+                            </div>
+                            <div class="client-detail">
+                                <label class="label">Metodo de Pago</label>
+                                <select name="" class="form-control detail" t-model="env.siatData.payment_method">
+                                    <option value="">-- metodo de pago --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="client-details-right">
+                            <div class="client-detail">
+                                <label class="label">Complemento</label>
+                                <input type="text" name="" value="" class="detail" t-model="env.siatData.complement" />
+                            </div>
+                            <div class="client-detail">
+                                <label class="label">Tipo de Documento</label>
+                                <select name="" class="form-control detail" t-model="env.siatData.document_type">
+                                    <option value="">-- tipo documento --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

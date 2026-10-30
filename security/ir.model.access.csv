@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sb_siat_client.access_siat_client_sync,access_sb_siat_client_sync,sb_siat_client.model_siat_client_sync,base.group_user,1,0,0,0
+sb_siat_client.access_siat_client_event,access_sb_siat_client_event,sb_siat_client.model_siat_client_event,base.group_user,1,0,0,0
+sb_siat_client.access_siat_client_invoice,access_sb_siat_client_invoice,sb_siat_client.model_siat_client_invoice,base.group_user,1,0,0,0
+sb_siat_client.access_siat_client_config,access_sb_siat_client_config,sb_siat_client.model_siat_client_config,base.group_user,1,1,1,1

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <t t-name="siat_client.events" owl="1">
+        <div id="com-siat-events-listing">
+            <div class="row mb-2">
+                <div class="col-12 col-sm-6">
+                    <h2>
+                        Registro de Eventos
+                        <button type="button" class="btn btn-primary" t-on-click="nuevoEvento">Nuevo</button>
+                    </h2>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <select class="form-control form-select bg-primary text-white"
+                            t-model="state.config_id"
+                            t-on-change="(evt) => this.onConfigChanged(evt)">
+                        <t t-foreach="configurations" t-as="config" t-key="config_index">
+                            <option t-att-value="config.id" >
+                                <t t-out="config.name" />
+                            </option>
+                        </t>
+                    </select>
+                </div>
+            </div>
+            <t t-if="state.items.length > 0 ">
+                <t t-foreach="state.items" t-as="event" t-key="event.id">
+                    <div class="card shadow mb-1">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-9">
+                                    <div class="mb-1">
+                                        <span class="label bg-primary rounded p-1 mr-1">
+                                            D: <t t-esc="event.id" />
+                                        </span>
+                                        <span class="label bg-info rounded p-1 mr-1">
+                                            Sucursal: <t t-esc="event.sucursal_id" />
+                                        </span>
+                                        <span class="label bg-info rounded p-1 mr-1">
+                                            Punto Venta: <t t-esc="event.puntoventa_id" />
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <div><b>Evento:</b> <t t-esc="event.evento_id" /> - <t t-esc="event.descripcion" /></div>
+                                        <div><b>Codigo Recepcion:</b> <t t-esc="event.codigo_recepcion" /></div>
+                                        <div><b>CUFD Evento:</b> <t t-esc="event.cufd_evento" /></div>
+                                    </div>
+                                    <div>
+                                        <t t-esc="event.status" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="alert alert-info text-center">No existe eventos registrados</div>
+            </t>
+        </div>
+    </t>
+</templates>

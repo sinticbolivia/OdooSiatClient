@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="siat_client.siat_view" owl="1">
+        <h2>Texto aqui</h2>
+    </t>
+    <t t-name="siat_client.view" owl="1">
+        <h2>Texto aqui</h2>
+    </t>
+</templates>

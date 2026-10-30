@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="siat_client.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension">
+        <xpath expr="//div[@class='payment-controls']/div[contains(@class, 'js_invoice')]" position="after">
+            <button t-if="currentOrder.is_to_invoice()" type="button" class="btn btn-primary"
+                t-on-click="onDatosFacturacionClicked">
+                Datos de Facturacion
+            </button>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,146 @@
+from odoo import models, api
+from odoo.exceptions import UserError, ValidationError
+import logging
+import traceback
+
+from ..classes.FactoryClient import FactoryClient
+from ..resources.resource_customer import ResourceCustomer
+from ..libs.siat_client import Factura
+
+_logger = logging.getLogger(__name__)
+
+
+class SiatInvoices(models.Model):
+    _name = 'siat_client.invoice'
+    _description = 'Siat Client Invoices data model'
+
+    @api.model
+    def get_items(self, *args, **kwargs):
+        try:
+            pagina = int(kwargs.get('page', 1))
+            config_id = int(kwargs.get('config_id', None))
+            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
+            service = FactoryClient.instance_service(config)
+            res = service.get_facturas(pagina)
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT CUIS ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT CUIS GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def create_invoice(self, *args, **kwargs):
+        invoiceData = kwargs.get('invoice')
+        config_id = int(kwargs.get('config_id', 0))
+        # print(invoiceData)
+
+        try:
+            factura = Factura()
+            factura.bind(invoiceData, ['items'])
+            _logger.info('INVOICE OBJECT DATA: %s', factura.to_json_pretty())
+            db_config = FactoryClient.get_db_config_by_id(config_id) if config_id > 0 else FactoryClient.get_db_config()
+
+            for item in invoiceData.get('items', []):
+                if item['siat_config_id'] != db_config.id:
+                    raise ValidationError('El producto "{0}" tiene la configuration de facturacion distinta a la seleccionada'.format(item['product_name']))
+
+            config = FactoryClient.db_data2config(db_config)
+            siat_api = FactoryClient.instance_service(config)
+            res = siat_api.crear_factura(factura)
+            _logger.info('SIAT CLIENT INVOICE RESPONSE: %s', res)
+            if res.get('status') == 'error':
+                raise UserError('SIAT CLIENT ERROR: ' + res.get('error'))
+
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+        except ValidationError as e:
+            _logger.error('SIAT CLIENT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+        except Exception as e:
+            _logger.error('SIAT CLIENT INVOICE GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def void_invoice(self, *args, **kwargs):
+        invoice_id = kwargs.get('id')
+        motivo_id = kwargs.get('motivoId')
+        config_id = int(kwargs.get('config_id', 0))
+        try:
+            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
+            siat_api = FactoryClient.instance_service(config)
+            res = siat_api.anular_factura(int(invoice_id), int(motivo_id))
+            _logger.info('SIAT CLIENT VOID INVOICE RESPONSE: %s', res)
+            if res.get('status') == 'error':
+                raise UserError('SIAT CLIENT ERROR: ' + res.get('error'))
+
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT INVOICE GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def revert_invoice(self, *args, **kwargs):
+        invoice_id = kwargs.get('id')
+        config_id = int(kwargs.get('config_id', 0))
+        try:
+            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
+            siat_api = FactoryClient.instance_service(config)
+            res = siat_api.revertir(int(invoice_id))
+            _logger.info('SIAT CLIENT REVERT INVOICE RESPONSE: %s', res)
+            if res.get('status') == 'error':
+                raise UserError('SIAT CLIENT ERROR: ' + res.get('error'))
+
+            return res
+
+        except UserError as e:
+            _logger.error('SIAT CLIENT REVERT INVOICE ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise e
+
+        except Exception as e:
+            _logger.error('SIAT CLIENT REVERT INVOICE GENERAL ERROR: %s', str(e))
+            _logger.error(traceback.format_exc())
+            raise UserError(str(e))
+
+    @api.model
+    def search_customer(self, *args, **kwargs):
+        keyword = kwargs.get('keyword', '')
+
+        if not keyword:
+            return []
+            #return request.make_json_response({'status': 'ok', 'code': 200, 'data': []})
+
+        items = self.env['res.partner'].search(
+            [
+                ('name', 'ilike', keyword),
+                ('type', '=', 'contact')
+            ],
+            order='name ASC',
+            limit=20
+        )
+        resources = []
+
+        for item in items:
+            res = ResourceCustomer(item.read()[0])
+            resources.append(res.dict())
+
+        return resources

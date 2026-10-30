@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="siat_pos_config_view_form" model="ir.ui.view">
+        <field name="name">siat.pos.config.form.view</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='checklist']" position="after">
+                <page name="siat_config" string="Configuracion SIAT">
+                    <div class="row mt16 o_settings_container">
+                        <setting title="Asigna la configuracion de facturacion para el Punto de Venta."
+                                string="Siat Config"
+                                help="">
+                            <field name="siat_config_id" />
+                        </setting>
+                        <setting title="Asigna el codigo para el Punto de Venta."
+                                string="Siat Codigo Punto de Venta"
+                                help="">
+                            <field name="siat_pos_code" />
+                        </setting>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
