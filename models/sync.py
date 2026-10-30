@@ -4,6 +4,7 @@ import logging
 import traceback
 
 from ..classes.FactoryClient import FactoryClient
+from ..classes.SiatCache import SiatCache
 
 _logger = logging.getLogger(__name__)
 
@@ -19,9 +20,16 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.cuis()
+            #config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-cuis'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.cuis(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -40,10 +48,17 @@ class SiatSync(models.Model):
         sucursal = int(kwargs.get('sucursal', 0))
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
+        renew = int(kwargs.get('renew', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.cufd()
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-cufd'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.cufd(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -62,9 +77,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.actividades(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-actividades'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.actividades(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -83,9 +104,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.leyendas(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-leyendas'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.leyendas(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -104,9 +131,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.motivos_anulacion(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-motivos_anulacion'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.motivos_anulacion(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -125,9 +158,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.lista_productos(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-lista_productos'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.lista_productos(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -146,9 +185,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.unidades_medida(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-unidades_medida'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.unidades_medida(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -167,9 +212,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_documentos_identidad(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_documentos_identidad'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_documentos_identidad(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -188,9 +239,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.monedas(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-monedas'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.monedas(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -209,9 +266,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.metodos_pago(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-metodos_pago'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.metodos_pago(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -230,9 +293,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_documentos_sector(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_documentos_sector'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_documentos_sector(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -251,9 +320,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.actividades_document_sector(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-actividades_document_sector'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.actividades_document_sector(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -272,9 +347,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_habitacion(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_habitacion'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_habitacion(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -293,9 +374,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_eventos(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_eventos'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_eventos(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -314,9 +401,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_emision(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_emision'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_emision(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -335,9 +428,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_facturas(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_facturas'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_facturas(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:
@@ -356,9 +455,15 @@ class SiatSync(models.Model):
         puntoventa = int(kwargs.get('puntoventa', 0))
         config_id = int(kwargs.get('config_id', 0))
         try:
-            config = FactoryClient.get_config_by_id(config_id) if config_id > 0 else None
-            service = FactoryClient.instance_sync_service(config)
-            res = service.tipos_punto_venta(sucursal, puntoventa)
+            db_config = FactoryClient.get_db_config_by_id(config_id)
+            cache_file = 'c{0}-cfg{1}-tipos_punto_venta'.format(db_config.company_id.id, db_config.id)
+            if SiatCache.file_needs_refresh(cache_file):
+                service = FactoryClient.instance_sync_service(FactoryClient.db_data2config(db_config))
+                res = service.tipos_punto_venta(sucursal, puntoventa)
+                SiatCache.write_cache_json(cache_file, res)
+            else:
+                res = SiatCache.read_cache_json(cache_file)
+
             return res
 
         except UserError as e:

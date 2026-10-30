@@ -91,37 +91,42 @@ export class SiatInvoicer extends Component
             }
             //await Promise.all([]);
             this.model.config = this.currentConfig;
-            let res = await this.model.getPuntosVenta();
-            this.state.puntosventa = res.data || [];
-            res = await this.model.getDocumentosIdentidad();
+            this.getConfigParameters();
+            let res = await this.model.getDocumentosIdentidad();
             this.state.tipos_documentos = res.data.RespuestaListaParametricas.listaCodigos;
             res = await this.model.getMonedas();
             this.state.monedas = res.data.RespuestaListaParametricas.listaCodigos;
             res = await this.model.getMetodosPago();
             this.state.metodos_pago = res.data.RespuestaListaParametricas.listaCodigos;
-
-            res = await this.model.getUserSectores();
-            this.state.sectores = res.data || {};
-            const entries = Object.entries(this.state.sectores);
-            //console.log('entries', entries);
-            if( entries.length > 0 )
-            {
-                const found = entries.find( item => item[1].code == 1);
-                if( !found )
-                {
-                    const first_sector = entries[0];
-                    //console.log('first_sector', first_sector);
-                    this.state.invoice.codigo_documento_sector = first_sector[1].code;
-                    this.prepareSector(Object.assign({code_str: first_sector[0]}, first_sector[1]));
-                }
-            }
-            console.log(res.data);
         }
         catch(e)
         {
             console.error('GET PARAMETERS ERROR', e);
+            console.trace();
         }
         this.uiService.unblock();
+    }
+    async getConfigParameters()
+    {
+        this.model.config = this.currentConfig;
+        let res = await this.model.getPuntosVenta();
+        this.state.puntosventa = res.data || [];
+        res = await this.model.getUserSectores();
+        this.state.sectores = res.data || {};
+        const entries = Object.entries(this.state.sectores);
+        //console.log('entries', entries);
+        if( entries.length > 0 )
+        {
+            const found = entries.find( item => item[1].code == 1);
+            if( !found )
+            {
+                const first_sector = entries[0];
+                //console.log('first_sector', first_sector);
+                this.state.invoice.codigo_documento_sector = first_sector[1].code;
+                this.prepareSector(Object.assign({code_str: first_sector[0]}, first_sector[1]));
+            }
+        }
+        //console.log(res.data);
     }
     get defaultConfig()
     {
@@ -161,7 +166,8 @@ export class SiatInvoicer extends Component
                 this.prepareSector({code_str: sector_code, ...this.state.sectores[sector_code]});
             },
             onConfigChanged: (config_id) => {
-                this.state.config = this.configurations.find( cfg => cfg.id == parseInt(config_id) )
+                this.state.config = this.configurations.find( cfg => cfg.id == parseInt(config_id) );
+                this.getConfigParameters();
             }
         });
     }
